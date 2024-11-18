@@ -15,8 +15,11 @@ Shared codespace for [Flatland Workshop and Symposium 2024](https://flatland-ass
 
 ## TL;DR;
 
-Pre-requisite: [Install Miniconda](https://docs.anaconda.com/miniconda/miniconda-install/) (or use any XXXconda).
+Use local setup (preferred) or, alternatively, Colab approach.
 
+### Local Setup
+
+Pre-requisite: [Install Miniconda](https://docs.anaconda.com/miniconda/miniconda-install/) (or use any XXXconda).
 
 ```shell
 conda create -n flatland python=3.10.0
@@ -33,6 +36,11 @@ jupyter notebook
 # open browser http://127.0.0.1:8888/notebooks/notebooks/flatland_animate.ipynb
 ```
 
+#### Troubleshooting
 
-### Troubleshooting
-* `Launching Jupyter Notebook on localhost results in '[Errno 49] Can't assign requested address'` &rarr; https://stackoverflow.com/questions/60271829/launching-jupyter-notebook-on-localhost-results-in-errno-49-cant-assign-requ
+* `Launching Jupyter Notebook on localhost results in '[Errno 49] Can't assign requested address'`
+  &rarr; https://stackoverflow.com/questions/60271829/launching-jupyter-notebook-on-localhost-results-in-errno-49-cant-assign-requ
+
+### Colab
+
+Alternatively, use the provided [simple_flatland_rl.ipynb on Colab](https://colab.research.google.com/drive/1qtwB4xyX4njmtMDScEBm-iIH5VyYpuWG?usp=sharing)

@@ -9,3 +9,6 @@ Shared codespace for [Flatland Workshop and Symposium 2024](https://flatland-ass
 * [Real-world infrastructures for Flatland](real-world-infrastructures/README.md)
 * [Interactive user interface design for real-time simulations with Flatland](interactive-user-interface-design/README.md)
 * [Human in the Loop and Flatland](human-in-the-loop/README.md)
+* [Benchmarking scenarios](benchmarking-scenarios/README.md)
+* [Flatland baselines](flatland-baselines/README.md)
+* [Flatland next rail env generator](next-rail-env-generator/README.md)

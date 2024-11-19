@@ -4,7 +4,7 @@ from typing import Set, Generic, TypeVar, Any, List, Dict
 
 
 # TODO type hints and generics domain-agnostic
-class Agent(metaclass=ABCMeta):
+class Entity(metaclass=ABCMeta):
     @property
     @abstractmethod
     def state(self):
@@ -31,7 +31,7 @@ class Agent(metaclass=ABCMeta):
         raise NotImplementedError()
 
 
-class Resource(Agent):
+class Resource(Entity):
     """
     Resource to be allocated. Agents occupy or "use" the resources to achieve certain
     action. e.g. track of train system, bandwidth of internet, storage space of warehouse systems.
@@ -42,7 +42,7 @@ class Resource(Agent):
     pass
 
 
-class Agent(Agent):
+class Agent(Entity):
     """
         Agents drive the internal dynamics of the system. An agent has a policy , which is a
     mapping from current state (including agent, object, and resource's objectives) to an action.

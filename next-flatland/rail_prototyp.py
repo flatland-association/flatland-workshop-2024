@@ -77,7 +77,7 @@ class RailArbiter(Arbiter):
                 resource_to_remove = effect.remove_relation.to_entity
 
                 # occupation check
-                valid_occupation = resource_to_add
+                resource_to_add.relations
 
                 # transition check
                 valid_transition = (

@@ -53,9 +53,11 @@ Missing values in present node are filled in with +inf (truncated).
 
 3. 🔲 What feature can we add to augment the information to conflict in Alberto's solution?
     * n-shortest: weighted
+![nShortest.png](nShortest.png)
     * further ideas?
 
 ## Next steps
 
 * Training environment to test out improvements? In Flatland or de-centralized?
 * Tree-LSTM
+* https://github.com/enlite-ai/maze

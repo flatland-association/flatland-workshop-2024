@@ -6,7 +6,7 @@ Shared codespace for [Flatland Workshop and Symposium 2024](https://flatland-ass
 
 * [Next Flatland Environment](next-flatland/README.md)
 * [Human in the Loop and Flatland](human-in-the-loop/README.md)
-* [Graph Something](graph-something/README.md)
+* [Graph Something](next-graph-based-observation/README.md)
 
 ### Backlog
 * [Complex schedules in Flatland using Netzgrafikeditor](_backlog/complex-schedules-using-netzgrafikeditor/README.md)

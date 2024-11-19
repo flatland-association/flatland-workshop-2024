@@ -1,10 +1,11 @@
 from abc import abstractmethod, ABCMeta
 from collections import defaultdict
+from dataclasses import dataclass
 from typing import Set, Generic, TypeVar, Any, List, Dict
 
 
 # TODO type hints and generics domain-agnostic
-class Agent(metaclass=ABCMeta):
+class Entity(metaclass=ABCMeta):
     @property
     @abstractmethod
     def state(self):
@@ -31,7 +32,7 @@ class Agent(metaclass=ABCMeta):
         raise NotImplementedError()
 
 
-class Resource(Agent):
+class Resource(Entity):
     """
     Resource to be allocated. Agents occupy or "use" the resources to achieve certain
     action. e.g. track of train system, bandwidth of internet, storage space of warehouse systems.
@@ -42,7 +43,7 @@ class Resource(Agent):
     pass
 
 
-class Agent(Agent):
+class Agent(Entity):
     """
         Agents drive the internal dynamics of the system. An agent has a policy , which is a
     mapping from current state (including agent, object, and resource's objectives) to an action.
@@ -68,8 +69,10 @@ class Agent(Agent):
         raise NotImplementedError()
 
 
-EntityType = TypeVar("EntityType", bound=Agent)
+EntityType = TypeVar("EntityType", bound=Entity)
 StateType = TypeVar("StateType")
+AgentType = TypeVar("AgentType", bound=Agent)
+ResourceType = TypeVar("ResourceType", bound=Resource)
 
 
 class Relation(Generic[EntityType, StateType]):
@@ -165,7 +168,11 @@ class Propagator:
         raise NotImplementedError()
 
 
-class SystemState:
+@dataclass()
+class SystemState(Generic[AgentType, RelationType, ResourceType]):
+    agents: list[AgentType]
+    relations: list[RelationType]
+    resources: list[ResourceType]
 
     @abstractmethod
     def actionsToEffects(self, action_dict):
@@ -174,6 +181,12 @@ class SystemState:
     @abstractmethod
     def pull_actions(self):
         raise NotImplementedError()
+
+    def relations_by_entity(self):
+        relations_by_entity = defaultdict(list)
+        for relation in self.relations:
+            relations_by_entity[relation.from_entity].append(relation)
+        return relations_by_entity
 
 
 class GenEnvSimulation:

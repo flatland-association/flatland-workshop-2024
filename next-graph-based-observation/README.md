@@ -1,13 +1,12 @@
 # Next Graph-Based Observation
 
-## Objective
+## Objectives
 
-1. :white_check_mark: Verify tree obs is collapsed (not intermedate cells)
-2. Re-create - integrate Alberto's solution into Flatland core
+1. ✅ Verify tree obs is collapsed (not intermedate cells) &rarr; at cell level
+2. 🔲 :black_square_button:Re-create - integrate Alberto's solution into Flatland core
     * pruned tree in-memory, list of features:
-```shell
 
-
+```text
 Class for storing the node features
 
 Each node information is composed of 14 features.
@@ -48,14 +47,17 @@ Each node information is composed of 14 features.
 
 Missing/padding nodes are filled in with -inf (truncated).
 Missing values in present node are filled in with +inf (truncated).
-
-
 ```
-3. What feature can we add to augment the information to conflict in Alberto's solution?
-    * n-shortest...?
+
+![Graph Observation](GraphObs.png)
+
+3. 🔲 What feature can we add to augment the information to conflict in Alberto's solution?
+    * n-shortest: weighted
+![nShortest.png](nShortest.png)
     * further ideas?
 
 ## Next steps
 
 * Training environment to test out improvements? In Flatland or de-centralized?
 * Tree-LSTM
+* https://github.com/enlite-ai/maze

@@ -67,24 +67,24 @@ class RemoveRelation(Effect):
     relation: Relation
 
 
-class RailState(SystemState):
+class RailState(SystemState[Agent, Relation, RailResource]):
     def __init__(
         self,
         agents: list[Agent],
         relations: list[Relation],
         resources: list[RailResource],
     ):
-        self.entities = agents
+        self.agents = agents
         self.relations = relations
         self.resources = resources
 
     def pull_actions(self):
-        for agent in self.entities:
+        for agent in self.agents:
             if isinstance(agent, TrainAgent):
                 yield agent.act()
 
     def add_entity(self, entity: Agent):
-        self.entities.append(entity)
+        self.agents.append(entity)
 
     def add_relation(self, from_entity: Agent, to_entity: Agent):
         self.relations.append(Relation(from_entity, to_entity))
@@ -96,7 +96,10 @@ class RailState(SystemState):
         self.resources.append(resource)
 
 
+@dataclass()
 class RailArbiter(Arbiter):
+    rail_state: RailState
+
     def check_rules(self, effects: list[Effect]) -> list[Effect]:
         valid_effects: list[Effect] = []
         for effect in effects:
@@ -106,7 +109,12 @@ class RailArbiter(Arbiter):
                 resource_to_remove = effect.remove_relation.to_entity
 
                 # occupation check
-                valid_occupation = resource_to_add
+                valid_occupation = (
+                    self.rail_state.relations_by_entity()[resource_to_add] == 0
+                )
+                if not valid_occupation:
+                    print("agent {} stopped at occupied resource".format(agent.id))
+                    continue
 
                 # transition check
                 valid_transition = (

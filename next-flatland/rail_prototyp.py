@@ -36,7 +36,7 @@ class RailNetwork:
     def get_resources(self):
         return self.resources
     
-    
+
 @dataclass()
 class TrainAgent(Agent):
     id: int

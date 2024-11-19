@@ -51,7 +51,7 @@ cd flatland-rl
 python -m pip install -r requirements.txt -r requirements-dev.txt
 
 export PYTHONPATH=.
-jupyter notebook
+python -m jupyter notebook
 
 # open browser http://127.0.0.1:8888/notebooks/notebooks/flatland_animate.ipynb
 ```

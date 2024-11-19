@@ -1,0 +1,8 @@
+name: genenv
+channels:
+  - defaults
+dependencies:
+  - python=3.10.14
+  - pip:
+    - flatland-rl==4.0.3
+    - numpy<2

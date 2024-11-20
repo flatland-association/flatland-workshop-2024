@@ -66,4 +66,6 @@ Missing values in present node are filled in with +inf (truncated).
 * Read up Tree-LSTM paper
 * Read up https://github.com/enlite-ai/maze
 * Implementation probably makes sense on top of graph-based core instead of grid to graph conversion to actions on grid -> could already be usable right now as
-  a "baseline", from that point of view maybe start early, Alberto not blocked, question of priorities...
+  a "baseline", from that point of view maybe start early, Alberto not blocked, question of priorities... Open:
+    * look up shortest paths in current implementation
+    * use Adrian's graph for shortest path computations in the core as well?

@@ -62,7 +62,8 @@ Missing values in present node are filled in with +inf (truncated).
 
 ## Next steps
 
-* Training environment to test out improvements? In Flatland or de-centralized?
+* Training environment to test out improvements? In Flatland or de-centralized? -> XGBoost compoare with trajectories from early training sortish.
 * Read up Tree-LSTM paper
 * Read up https://github.com/enlite-ai/maze
-* Implementation probably makes sense on top of graph-based core instead of grid to graph conversion to actions on grid
+* Implementation probably makes sense on top of graph-based core instead of grid to graph conversion to actions on grid -> could already be usable right now as
+  a "baseline", from that point of view maybe start early, Alberto not blocked, question of priorities...

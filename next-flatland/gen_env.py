@@ -175,7 +175,7 @@ class SystemState(Generic[AgentType, RelationType, ResourceType]):
     resources: list[ResourceType]
 
     @abstractmethod
-    def actionsToEffects(self, action_dict):
+    def actions_to_effects(self, actions):
         raise NotImplementedError()
 
     @abstractmethod
@@ -208,7 +208,7 @@ class GenEnvSimulation:
             dones = self.step()
 
     def step(self):
-        self.addEffects(self.state.actionsToEffects(self.state.pull_actions()))
+        self.addEffects(self.state.actions_to_effects(self.state.pull_actions()))
         # TODO malfuntion/env
         self.queue = self.arbiter.check_rules(self.queue)
         dones = self.propagator.propagate(self.queue)

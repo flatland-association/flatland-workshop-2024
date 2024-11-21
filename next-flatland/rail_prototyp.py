@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 from gen_env import Agent, Arbiter, Effect, Agent, Relation, Resource, SystemState
 
@@ -5,7 +7,13 @@ from gen_env import Agent, Arbiter, Effect, Agent, Relation, Resource, SystemSta
 @dataclass()
 class RailResource(Resource):
     id: int
-    valid_routes: dict[Resource, list[Resource]]
+    valid_routes: dict[RailResource, list[RailResource]]
+
+
+@dataclass()
+class MoveAction:
+    agent: Agent
+    destination: RailResource
 
 
 class RailNetwork:
@@ -18,8 +26,10 @@ class RailNetwork:
     def _initialize_routes(self):
         # Define valid routes for straight line 0->1->2->3->4->5
         for i in range(5):
-            self.resources[i].valid_routes[self.resources[i]] = [self.resources[i+1]]
-            self.resources[i+1].valid_routes[self.resources[i+1]] = [self.resources[i]]
+            self.resources[i].valid_routes[self.resources[i]] = [self.resources[i + 1]]
+            self.resources[i + 1].valid_routes[self.resources[i + 1]] = [
+                self.resources[i]
+            ]
 
         # Define valid routes for straight line 6->7
         self.resources[6].valid_routes[self.resources[6]] = [self.resources[7]]
@@ -27,12 +37,18 @@ class RailNetwork:
 
         # Add switch connections
         # At resource 1 (connecting to 6)
-        self.resources[1].valid_routes[self.resources[0]] = [self.resources[2], self.resources[6]]
+        self.resources[1].valid_routes[self.resources[0]] = [
+            self.resources[2],
+            self.resources[6],
+        ]
         self.resources[1].valid_routes[self.resources[2]] = [self.resources[0]]
         self.resources[1].valid_routes[self.resources[6]] = [self.resources[0]]
 
         # Move switch from resource 5 to resource 4
-        self.resources[4].valid_routes[self.resources[5]] = [self.resources[3], self.resources[7]]
+        self.resources[4].valid_routes[self.resources[5]] = [
+            self.resources[3],
+            self.resources[7],
+        ]
         self.resources[4].valid_routes[self.resources[3]] = [self.resources[5]]
         self.resources[4].valid_routes[self.resources[7]] = [self.resources[5]]
 
@@ -40,7 +56,9 @@ class RailNetwork:
         for resource in self.resources:
             for from_resource, to_resources in resource.valid_routes.items():
                 for to_resource in to_resources:
-                    relation = Relation(from_entity=from_resource, to_entity=to_resource)
+                    relation = Relation(
+                        from_entity=from_resource, to_entity=to_resource
+                    )
                     self.relations.append(relation)
 
     def get_resources(self):
@@ -48,20 +66,16 @@ class RailNetwork:
 
     def get_relations(self):
         return self.relations
-    
+
 
 @dataclass()
 class TrainAgent(Agent):
     id: int
-    previous_position: Resource
+    previous_position: RailResource
 
     def act(self):
-        return AddAndRemoveRelation(
-            remove_relation=Relation(
-                self, self.previous_position, self.current_position
-            ),
-            add_relation=Relation(self, self.current_position, self.next_position),
-        )
+        next_position = self.previous_position.valid_routes[self.previous_position][0]
+        return MoveAction(self, next_position)
 
 
 @dataclass()
@@ -83,18 +97,37 @@ class RemoveRelation(Effect):
 class RailState(SystemState[Agent, Relation, RailResource]):
     def __init__(
         self,
-        agents: list[Agent],
-        relations: list[Relation],
-        resources: list[RailResource],
+        agents_starting_resources: list[Resource],
     ):
-        self.agents = agents
-        self.relations = relations
-        self.resources = resources
+        rail_network = RailNetwork()
+        self.agents = [TrainAgent(id=i) for i in range(len(agents_starting_resources))]
+        self.relations = rail_network.get_relations()
+        self.resources = rail_network.get_resources()
+        self.relations.extend(
+            [
+                Relation(agent, resource)
+                for agent, resource in zip(self.agents, agents_starting_resources)
+            ]
+        )
 
     def pull_actions(self):
+        actions = []
         for agent in self.agents:
-            if isinstance(agent, TrainAgent):
-                yield agent.act()
+            actions.append(agent.act())
+        return actions
+
+    def actions_to_effects(self, actions: list[MoveAction]) -> list[Effect]:
+        effects = []
+        for action in actions:
+            effects.append(
+                AddAndRemoveRelation(
+                    remove_relation=Relation(
+                        action.agent, action.agent.previous_position
+                    ),
+                    add_relation=Relation(action.agent, action.destination),
+                )
+            )
+        return effects
 
     def add_entity(self, entity: Agent):
         self.agents.append(entity)
@@ -134,13 +167,14 @@ class RailArbiter(Arbiter):
                     resource_to_add.id
                     in resource_to_remove.valid_routes[agent.previous_position]
                 )
-                if valid_transition:
-                    valid_effects.extend(
-                        [
-                            AddRelation(effect.add_relation),
-                            RemoveRelation(effect.remove_relation),
-                        ]
-                    )
-                print("agent {} stopped at invalid transition".format(agent.id))
+                if not valid_transition:
+                    print("agent {} stopped at invalid transition".format(agent.id))
+
+                valid_effects.extend(
+                    [
+                        AddRelation(effect.add_relation),
+                        RemoveRelation(effect.remove_relation),
+                    ]
+                )
 
         return valid_effects

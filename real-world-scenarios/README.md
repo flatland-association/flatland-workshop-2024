@@ -16,7 +16,7 @@ The more building blocks there are found and implemented (or made possible to be
 
 ### Microscopic infrastructure and principles
 
-| Preview | Element | Explanation / Example | Domain
+| <div style="width:200px">Preview</div> | Element | Explanation / Example | Domain
 |---|---|---|---
 | ![Track](img/elem-track.png) | Track | Where agents can move (or be). | railway
 | TODO | Track specifics | Track with specific length, vmax, gradient... | railway
@@ -45,7 +45,7 @@ The more building blocks there are found and implemented (or made possible to be
 
 ### Infrastructure
 
-| Preview | Problem | Explanation / Example | Domain
+| <div style="width:200px">Preview</div> | Problem | Explanation / Example | Domain
 |---|---|---|---
 | TODO | Resources can limit max. speed. | Bends preferably not to be taken at full speed. | railway
 | ![Resources can be one-way](img/prob-one-way-resources.png) | Resources can be one-way | If a tram drives/stops on the track the wrong way, there won't be a platform for people to get out, thus in a station it's only allowed to drive on the "right" track. | tramway
@@ -57,7 +57,7 @@ The more building blocks there are found and implemented (or made possible to be
 
 ### Agent
 
-| Preview | Problem | Explanation / Example | Domain
+| <div style="width:200px">Preview</div> | Problem | Explanation / Example | Domain
 |---|---|---|---
 | TODO | Agents can have different speed profiles | "IR" trains are more agile than freight trains. | railway
 | TODO | Agents can have different capacities. | More people fit into "DOSTO" than "EC". | railway
@@ -68,7 +68,7 @@ The more building blocks there are found and implemented (or made possible to be
 
 ### Service (combining Infrastructure and agent)
 
-| Preview | Problem | Explanation / Example | Domain
+| <div style="width:200px">Preview</div> | Problem | Explanation / Example | Domain
 |---|---|---|---
 | TODO | Speed profile depends on both resource vs. agent sub-type | Some switches have to be passed slow by certain train types. | railway
 | TODO | Passage possible for certain agent sub-types only | Tunnels that are too low for "DOSTO" trains; electrified loks can only drive on electrified tracks; ETCS-1 trains can't drive on ETCS-2 tracks. | railway
@@ -80,7 +80,7 @@ The more building blocks there are found and implemented (or made possible to be
 
 ### Failure modes and effects
 
-| Preview | Problem | Explanation / Example | Domain
+| <div style="width:200px">Preview</div> | Problem | Explanation / Example | Domain
 |---|---|---|---
 | TODO | Agent arrives a little late | A train arrives a few minutes late at its destination for unmodelable reasons. | railway
 | TODO | Agent arrives t>>0 late | A train arrives many minutes (e.g. > "Taktfahrplan-halbe") late | DB

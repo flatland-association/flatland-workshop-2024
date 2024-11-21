@@ -20,6 +20,10 @@ Richta H.N.
 [Automatische Dispositionsassistenz auf Grundlage Produktionsmodell Betrieb ADA-PMB für mehr Pünktlichkeit](https://www.gdsd.statistik.uni-muenchen.de/2023_neu/presentations_speaker/deutsche_bahn_gdsd23.pdf)
 German Data Science Days 2023
 
+Marot, A., Rozier, A., Dussartre, M., Crochepierre, L., & Donnot, B. (2022). 
+[Towards an AI assistant for power grid operators.](https://www.researchgate.net/publication/363763107_Towards_an_AI_Assistant_for_Power_Grid_Operators)
+In HHAI2022: Augmenting Human Intellect (pp. 79-95). IOS Press.
+
 Ammar N. Abbas, Chidera W. Amazu, Joseph Mietkiewicz, Houda Briwa, Andres Alonzo Perez, Gabriele Baldissone, Micaela Demichela, Georgios G. Chasparis, John D. Kelleher, Maria Chiara Leva
 [Analyzing Operator States and the Impact of AI-Enhanced Decision Support in Control Rooms: A Human-in-the-Loop Specialized Reinforcement Learning Framework for Intervention Strategies](https://arxiv.org/abs/2402.13219)
 

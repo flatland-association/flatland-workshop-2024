@@ -120,6 +120,30 @@ class RailArbiter(Arbiter):
                     print(f"Invalid transition from {curr_infra_id} to {next_infra_id}")
                     continue
 
+                # no other agent is in the using next underlying resource
+                resources_to_occupy = filter(
+                    lambda node: node.node_type == StateNodeType.RESOURCE,
+                    state.neighbors(next_infra_id, "out"),
+                )
+                linked_infra = {
+                    infra.id
+                    for resource in resources_to_occupy
+                    for infra in state.neighbors(resource.id, "in")
+                    if infra.node_type == StateNodeType.INFRASTRUCTURE
+                }
+                agents_on_linked_infra = {
+                    agent.id
+                    for infra_id in linked_infra
+                    for agent in state.neighbors(infra_id, "in")
+                    if agent.node_type == StateNodeType.AGENT
+                }
+                if agents_on_linked_infra - {agent_id}:
+                    print(
+                        f"Agent {agent_id} can't move to {next_infra_id}. "
+                        f"Agent {agents_on_linked_infra} is already there."
+                    )
+                    continue
+
                 valid_effects.extend(
                     [
                         AddEdge(edge=effect.edge_to_add),

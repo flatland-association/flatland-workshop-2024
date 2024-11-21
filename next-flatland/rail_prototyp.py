@@ -151,3 +151,10 @@ class RailArbiter(Arbiter):
                 print("agent {} stopped at invalid transition".format(agent.id))
 
         return valid_effects
+
+
+# Example usage
+if __name__ == "__main__":
+    rail_network = RailNetwork()
+    resources = rail_network.get_resources()
+    relations = rail_network.get_relations()

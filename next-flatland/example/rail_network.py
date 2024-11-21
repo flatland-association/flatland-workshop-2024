@@ -8,7 +8,7 @@ from next_flatland.network.state_network.plot_3d import (
 )
 
 RESOURCE_Z = -50
-NODE_DISTANCE = 100
+NODE_DISTANCE = 20
 TRACK_LOW_Y = 0
 TRACK_HIGH_Y = 50
 BACKWARD_OFFSET = 10
@@ -66,7 +66,7 @@ def create_example_rail_network() -> StateNetwork:
                     ),
                 ),
                 (
-                    EndNodeIdPair((resource_node_id, backward_node_id)),
+                    EndNodeIdPair((backward_node_id, resource_node_id)),
                     StateLink(
                         link_type=StateLinkType.ALLOCATION,
                     ),

@@ -87,7 +87,7 @@ def _compute_graph_traces(
             x=edges["edge_x"],
             y=edges["edge_y"],
             z=edges["edge_z"],
-            line={"width": 2, "color": color_map[edge_type]},
+            line={"width": 6, "color": color_map[edge_type]},
             mode="lines",
             name=edge_type,
             legendgroup=edge_type,
@@ -113,4 +113,46 @@ def _compute_graph_traces(
         for node_type, nodes in nodes_by_type.items()
     ]
 
-    return edge_traces + node_traces
+    # Add arrows (cones) for each edge
+    arrow_traces = []
+    for end_node_pair, link in network.link_by_end_node_iterator():
+        s_node = nodes_by_id[end_node_pair[0]]
+        t_node = nodes_by_id[end_node_pair[1]]
+
+        # Vector components for the arrow direction
+        arrow_vector = [
+            t_node.coordinates.x - s_node.coordinates.x,
+            t_node.coordinates.y - s_node.coordinates.y,
+            t_node.coordinates.z - s_node.coordinates.z,
+        ]
+
+        # Arrow starting point (at the mid-point of the edge for better clarity)
+        mid_point = [
+            (s_node.coordinates.x + t_node.coordinates.x) / 2,
+            (s_node.coordinates.y + t_node.coordinates.y) / 2,
+            (s_node.coordinates.z + t_node.coordinates.z) / 2,
+        ]
+
+        # Add a cone to represent the arrow
+        arrow_traces.append(
+            go.Cone(
+                x=[mid_point[0]],
+                y=[mid_point[1]],
+                z=[mid_point[2]],
+                u=[arrow_vector[0]],
+                v=[arrow_vector[1]],
+                w=[arrow_vector[2]],
+                sizemode="absolute",
+                sizeref=4,  # Adjust the size of the arrows
+                anchor="tail",
+                colorscale=[
+                    [0, color_map[link.link_type.name]],
+                    [1, color_map[link.link_type.name]],
+                ],
+                showscale=False,
+                name=f"Arrow: {link.link_type.name}",
+                legendgroup=link.link_type.name,
+            )
+        )
+
+    return edge_traces + node_traces + arrow_traces

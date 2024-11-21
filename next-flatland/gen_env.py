@@ -40,7 +40,22 @@ class Resource(Entity):
     location , etc.
     """
 
-    pass
+    def __init__(self):
+        self._state = None
+        self._rules = set()
+        self._objectives = None
+
+    @property
+    def state(self):
+        return self._state
+
+    @property
+    def rules(self) -> Set[Any]:
+        return self._rules
+
+    @property
+    def objectives(self):
+        return self._objectives
 
 
 class Agent(Entity):

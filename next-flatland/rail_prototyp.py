@@ -1,5 +1,8 @@
 from dataclasses import dataclass
-from gen_env import Agent, Arbiter, Effect, Agent, Relation, Resource, SystemState
+from collections import defaultdict
+import random
+from typing import Dict, List, Set, Any
+from gen_env import Agent, Arbiter, Effect, Agent, GenEnvSimulation, Relation, Resource, SystemState, Propagator
 import networkx as nx
 import matplotlib.pyplot as plt
 
@@ -82,18 +85,59 @@ class RailNetwork:
         nx.draw(G, pos, with_labels=True, node_size=700, node_color='skyblue', font_size=10, font_weight='bold')
         plt.show()
     
+@dataclass
+class RandomPolicy:
+    def propose_next_position(self, current_position: RailResource, previous_position: RailResource) -> RailResource:
+        possible_resources = list(current_position.valid_routes[current_position])
+        if previous_position in possible_resources:
+            possible_resources.remove(previous_position)
+        if not possible_resources:
+            return None
+        return random.choice(possible_resources)
 
-@dataclass()
+@dataclass
 class TrainAgent(Agent):
     id: int
-    previous_position: Resource
+    current_position: RailResource
+    previous_position: RailResource = None
+    policy: RandomPolicy = None
+    _state: Dict = None
+    _rules: Set = None
+    _objectives: Dict = None
 
-    def act(self):
+    def __post_init__(self):
+        self._state = {
+            'current_position': self.current_position,
+            'previous_position': self.previous_position
+        }
+        self._rules = {
+            'valid_move': lambda next_pos: next_pos in self.current_position.valid_routes.get(self.current_position, [])
+        }
+        self._objectives = {
+            'reach_end': False
+        }
+
+    @property
+    def state(self):
+        return self._state
+
+    @property
+    def rules(self) -> Set[Any]:
+        return self._rules
+
+    @property
+    def objectives(self):
+        return self._objectives
+
+    def act(self) -> Effect:
+        next_position = self.policy.propose_next_position(self.current_position, self.previous_position)
+        print(next_position.id)
+        if next_position is None:
+            return None
+        
         return AddAndRemoveRelation(
-            remove_relation=Relation(
-                self, self.previous_position, self.current_position
-            ),
-            add_relation=Relation(self, self.current_position, self.next_position),
+            add_relation=Relation(from_entity=self, to_entity=next_position),
+            remove_relation=Relation(from_entity=self, to_entity=self.current_position)
         )
 
 
@@ -125,9 +169,26 @@ class RailState(SystemState[Agent, Relation, RailResource]):
         self.resources = resources
 
     def pull_actions(self):
+        """Pull actions from all agents"""
         for agent in self.agents:
             if isinstance(agent, TrainAgent):
                 yield agent.act()
+
+    def actionsToEffects(self, actions) -> List[Effect]:
+        """Convert agent actions to effects"""
+        effects = []
+        for action in actions:
+            if action is not None:  # Skip if agent has no valid move
+                if isinstance(action, AddAndRemoveRelation):
+                    effects.append(action)
+        return effects
+
+    def relations_by_entity(self) -> Dict[Any, int]:
+        """Count relations per entity"""
+        counts = defaultdict(int)
+        for relation in self.relations:
+            counts[relation.to_entity] += 1
+        return counts
 
     def add_entity(self, entity: Agent):
         self.agents.append(entity)
@@ -181,10 +242,65 @@ class RailArbiter(Arbiter):
 
         return valid_effects
 
+@dataclass
+class RailPropagator(Propagator):
+    rail_state: RailState
 
+    def propagate(self, effects: List[Effect]) -> Dict[Agent, bool]:
+        """
+        Propagates effects by:
+        - Validating effect types
+        - Updating agent positions
+        - Updating rail state relations
+        - Tracking completion status
+        """
+        dones = {}
+        
+        for effect in effects:
+            if isinstance(effect, AddAndRemoveRelation):
+                agent = effect.add_relation.from_entity
+                next_position = effect.add_relation.to_entity
+                current_position = effect.remove_relation.to_entity
+                
+                # Update agent's position
+                agent.previous_position = current_position
+                agent.current_position = next_position
+                
+                # Update relations in rail state
+                self.rail_state.remove_relation(agent, current_position)
+                self.rail_state.add_relation(agent, next_position)
+                
+                # Track if agent has completed its objective
+                dones[agent] = False  # Could be updated based on objectives
+        
+        return dones
+    
 # Example usage
 if __name__ == "__main__":
     rail_network = RailNetwork()
-    resources = rail_network.get_resources()
-    relations = rail_network.get_relations()
-    rail_network.plot_network()
+    initial_position = [rail_network.resources[0],rail_network.resources[5]]
+    
+    # Create agents with random policy
+    agents = [
+        TrainAgent(
+            id=i,
+            current_position=initial_position[i],
+            policy=RandomPolicy()
+        ) for i in range(2)
+    ]
+    
+    # Setup simulation components
+    rail_state = RailState(agents=agents, 
+                          relations=rail_network.relations,
+                          resources=rail_network.resources)
+    rail_arbiter = RailArbiter(rail_state=rail_state)
+    rail_propagator = RailPropagator(rail_state=rail_state)
+    
+    # Create and run simulation
+    simulation = GenEnvSimulation(
+        propagator=rail_propagator,
+        state=rail_state,
+        arbiter=rail_arbiter
+    )
+    
+    simulation.run()

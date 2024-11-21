@@ -194,17 +194,18 @@ class TrainAgent(Agent):
         if next_position is None:
             return None
 
-        return AddAndRemoveRelation(
-            add_relation=Relation(from_entity=self, to_entity=next_position),
-            remove_relation=Relation(from_entity=self, to_entity=self.current_position),
+        return MoveEffect(
+            entity=self,
+            from_position=self.current_position,
+            to_position=next_position,
         )
 
 
 @dataclass()
 class MoveEffect(Effect):
-    entity: Entity
-    from_position: Resource
-    to_position: Resource
+    entity: TrainAgent
+    from_position: RailResource
+    to_position: RailResource
 
 
 @dataclass()
@@ -255,10 +256,10 @@ class RailState(SystemState[Agent, Relation, RailResource]):
     def add_entity(self, entity: Agent):
         self.agents.append(entity)
 
-    def add_relation(self, from_entity: Agent, to_entity: Agent):
+    def add_relation(self, from_entity: Entity, to_entity: Entity):
         self.relations.append(Relation(from_entity, to_entity))
 
-    def remove_relation(self, from_entity: Agent, to_entity: Agent):
+    def remove_relation(self, from_entity: Entity, to_entity: Entity):
         self.relations.remove(Relation(from_entity, to_entity))
 
     def add_resource(self, resource: RailResource):
@@ -282,13 +283,12 @@ class RailArbiter(Arbiter):
                 for entity in (
                     self.rail_state.resource_occupancy[to_position] is not None
                 ):
-                    if isinstance(entity, TrainAgent):
-                        print(
-                            "conflict with between agents {} and {}".format(
-                                agent.id, entity.id
-                            )
+                    print(
+                        "conflict with between agents {} and {}".format(
+                            agent.id, entity.id
                         )
-                        continue
+                    )
+                    continue
 
                 # Check if transition is valid
                 if resource_to_add.id in resource_to_remove.valid_routes.get(
@@ -319,11 +319,10 @@ class RailPropagator(Propagator):
 
         for effect in effects:
             if isinstance(effect, MoveEffect):
-                agent = effect.add_relation.from_entity
-                next_position = effect.add_relation.to_entity
-                current_position = effect.remove_relation.to_entity
+                agent = effect.entity
+                next_position = effect.to_position
+                current_position = effect.from_position
 
-                # Update agent's position
                 agent.previous_position = current_position
                 agent.current_position = next_position
 

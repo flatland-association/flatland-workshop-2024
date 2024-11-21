@@ -5,7 +5,8 @@
 A dedicated core engine provides
 
 * A clear framework for users to build their own application under a rigorous formulation
-* Optimized core simulation functions agnostic to application, flexible for different potential applications, e.g. air traffic, power grid, robot control.
+* Optimized core simulation functions agnostic to application, flexible for different potential applications, e.g. air
+  traffic, power grid, robot control.
 
 By doing so, we can
 
@@ -14,7 +15,8 @@ By doing so, we can
 
 ### Flatland 3.0
 
-Flatland's current implementation ([Flatland 3.0](https://www.aicrowd.com/challenges/flatland-3)) can have the following problem:
+Flatland's current implementation ([Flatland 3.0](https://www.aicrowd.com/challenges/flatland-3)) can have the following
+problem:
 
 * A highly railway-specific core implementation --> hard to include other applications
 * Disorganized codebase --> extra difficulty to introduce new features
@@ -79,13 +81,15 @@ Note that in general, a relation can be directed or undirected.
 ### Introduction
 
 > [!NOTE]  
-> System Dynamics = Actions from Agents based on System State, Effects from Agent Actions and Effect Creator, Arbiter checks validity and adds effects,
+> System Dynamics = Actions from Agents based on System State, Effects from Agent Actions and Effect Creator, Arbiter
+> checks validity and adds effects,
 > Propagator updates the System State
 
 
 Suppose the relation graph can completely describe the system, we have to define the dynamics of
 the system to allow state evolution.
-The basic idea is similar to a [state-space representation](https://en.wikipedia.org/wiki/State-space_representation) where the changes of current state is
+The basic idea is similar to a [state-space representation](https://en.wikipedia.org/wiki/State-space_representation)
+where the changes of current state is
 determined by the internal dynamics plus external forces. It can be expressed as
 $$\dot{x}(t) = f_{mix}(f_{in}(x(t),u(t))$$
 where
@@ -135,7 +139,8 @@ classDiagram
     State "1" -- "*" Entity
 ```
 
-Note: w.l.o.g., in this representation, relations do not have attributes (the internal static and dynamic attributes of relations can be held as part of the
+Note: w.l.o.g., in this representation, relations do not have attributes (the internal static and dynamic attributes of
+relations can be held as part of the
 internal state of entities).
 
 #### Effects
@@ -199,7 +204,8 @@ between the effects.
 ### System Dynamics Flow
 
 > [!NOTE]  
-> System Dynamics = Actions from Agents based on System State, Effects from Agent Actions and Effect Creator, Arbiter checks validity and adds effects,
+> System Dynamics = Actions from Agents based on System State, Effects from Agent Actions and Effect Creator, Arbiter
+> checks validity and adds effects,
 > Propagator updates the System State
 
 ```mermaid
@@ -256,7 +262,8 @@ graph TB
 
 Consider case 2 simple switch with 4 transitions (bottom <--> top and bottom <--> left).
 
-Keep track of occupation direction (in agent or in track) and define rule to prevent illegals (physically impossible) transition:
+Keep track of occupation direction (in agent or in track) and define rule to prevent illegals (physically impossible)
+transition:
 
 ```mermaid
 flowchart BT

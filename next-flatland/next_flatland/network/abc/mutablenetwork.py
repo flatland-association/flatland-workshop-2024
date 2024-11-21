@@ -5,10 +5,17 @@ from typing import AbstractSet, TypeVar
 
 import igraph
 
-from next_flatland.network.abc import (EndNodeIdPair, ImmutableNetworkABC,
-                                       NodeId, NodeIndex)
+from next_flatland.network.abc.link import EndNodeIdPair, NodeId
 from next_flatland.network.abc.immutablenetwork_abc import (
-    VERTEX_NAME_IN_GRAPH, LinkIndex, LinkT, LinkTypeT, NodeT, NodeTypeT)
+    VERTEX_NAME_IN_GRAPH,
+    ImmutableNetworkABC,
+    LinkIndex,
+    LinkT,
+    LinkTypeT,
+    NodeT,
+    NodeTypeT,
+)
+from next_flatland.network.abc.node import BaseNodeType, NodeIndex
 
 Self = TypeVar("Self", bound="MutableNetworkABC")
 

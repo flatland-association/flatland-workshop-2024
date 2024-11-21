@@ -108,7 +108,7 @@ def _compute_graph_traces(
             mode="markers",
             hoverinfo="x+y+z+text",
             legendgroup=node_type,
-            marker={"size": 1, "line_width": 0, "color": color_map[node_type]},
+            marker={"size": 25, "line_width": 0, "color": color_map[node_type]},
         )
         for node_type, nodes in nodes_by_type.items()
     ]

@@ -16,9 +16,6 @@ from gen_env import (
     SystemState,
     Propagator,
 )
-import networkx as nx
-import matplotlib.pyplot as plt
-
 
 @dataclass()
 class RailResource(Resource):
@@ -102,6 +99,8 @@ class RailNetwork:
         ]
         self.resources[4].valid_routes[self.resources[3]] = [self.resources[5]]
         self.resources[4].valid_routes[self.resources[7]] = [self.resources[5]]
+
+
 
     def create_network(self):
         system_state_network = SSNetwork().create_empty()

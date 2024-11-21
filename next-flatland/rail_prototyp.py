@@ -1,11 +1,20 @@
 from dataclasses import dataclass
 from gen_env import Agent, Arbiter, Effect, Agent, Relation, Resource, SystemState
-
+import networkx as nx
+import matplotlib.pyplot as plt
 
 @dataclass()
 class RailResource(Resource):
     id: int
     valid_routes: dict[Resource, list[Resource]]
+
+    def __hash__(self):
+        return hash(self.id)
+
+    def __eq__(self, other):
+        if isinstance(other, RailResource):
+            return self.id == other.id
+        return False
 
 
 class RailNetwork:
@@ -34,14 +43,14 @@ class RailNetwork:
 
         # Add switch connections
         # At resource 1 (connecting to 6)
-        self.resources[1].valid_routes[self.resources[0]] = [self.resources[2], self.resources[6]]
-        self.resources[1].valid_routes[self.resources[2]] = [self.resources[0]]
-        self.resources[1].valid_routes[self.resources[6]] = [self.resources[0]]
+        self.resources[1].valid_routes[self.resources[1]] = [self.resources[2], self.resources[6]]
+        self.resources[1].valid_routes[self.resources[2]] = [self.resources[1]]
+        self.resources[1].valid_routes[self.resources[6]] = [self.resources[1]]
 
         # At resource 4 (connecting to 7)
-        self.resources[4].valid_routes[self.resources[5]] = [self.resources[3], self.resources[7]]
-        self.resources[4].valid_routes[self.resources[3]] = [self.resources[5]]
-        self.resources[4].valid_routes[self.resources[7]] = [self.resources[5]]
+        self.resources[4].valid_routes[self.resources[4]] = [self.resources[3], self.resources[7]]
+        self.resources[4].valid_routes[self.resources[3]] = [self.resources[4]]
+        self.resources[4].valid_routes[self.resources[7]] = [self.resources[4]]
 
     def _initialize_relations(self):
         for resource in self.resources:
@@ -55,6 +64,15 @@ class RailNetwork:
 
     def get_relations(self):
         return self.relations
+    
+    def plot_network(self):
+        G = nx.DiGraph()
+        for relation in self.relations:
+            G.add_edge(relation.from_entity.id, relation.to_entity.id)
+
+        pos = nx.spring_layout(G)
+        nx.draw(G, pos, with_labels=True, node_size=700, node_color="skyblue", font_size=10, font_weight="bold", arrows=True)
+        plt.show()
     
 
 @dataclass()
@@ -116,6 +134,9 @@ class RailState(SystemState[Agent, Relation, RailResource]):
         self.resources.append(resource)
 
 
+
+   
+
 @dataclass()
 class RailArbiter(Arbiter):
     rail_state: RailState
@@ -158,3 +179,4 @@ if __name__ == "__main__":
     rail_network = RailNetwork()
     resources = rail_network.get_resources()
     relations = rail_network.get_relations()
+    rail_network.plot_network()

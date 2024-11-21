@@ -28,5 +28,6 @@ Worked on a simple prototype to test the concept in code.
 
 ## Links
 
-[Agent-based modeling via graph rewriting](https://blog.algebraicjulia.org/post/2023/07/graphical-schedule/)
+- [Agent-based modeling via graph rewriting](https://blog.algebraicjulia.org/post/2023/07/graphical-schedule/)
+
 

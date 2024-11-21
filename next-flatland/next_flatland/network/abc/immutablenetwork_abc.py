@@ -9,10 +9,10 @@ from typing import Any, Generic, Iterator, Literal, NewType, Type, TypeVar, Unio
 
 import igraph
 
-from network.abc import NodeABC, LinkABC
-from network.abc.debug import debug_plot
-from network.abc.link import BaseLinkType, EndNodeIdPair
-from network.abc.node import BaseNodeType, NodeId, NodeIndex
+from next_flatland.network.abc import NodeABC, LinkABC
+from next_flatland.network.abc.debug import debug_plot
+from next_flatland.network.abc.link import BaseLinkType, EndNodeIdPair
+from next_flatland.network.abc.node import BaseNodeType, NodeId, NodeIndex
 
 NodeT = TypeVar("NodeT", bound=NodeABC)
 LinkT = TypeVar("LinkT", bound=LinkABC)

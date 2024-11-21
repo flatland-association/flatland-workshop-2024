@@ -214,56 +214,36 @@ class RemoveRelation(Effect):
     relation: Relation
 
 
+
 class RailState(SystemState[Agent, Relation, RailResource]):
     def __init__(
         self,
-        agents_starting_resources: list[Resource],
+        agents: list[Agent],
+        relations: list[Relation],
+        resources: list[RailResource],
     ):
-        rail_network = RailNetwork()
-        self.agents = [TrainAgent(id=i) for i in range(len(agents_starting_resources))]
-        self.relations = rail_network.get_relations()
-        self.resources = rail_network.get_resources()
-        self.relations.extend(
-            [
-                Relation(agent, resource)
-                for agent, resource in zip(self.agents, agents_starting_resources)
-            ]
-        )
+        self.agents = agents
+        self.relations = relations
+        self.resources = resources
 
     def pull_actions(self):
         """Pull actions from all agents"""
-        actions = []
         for agent in self.agents:
-            actions.append(agent.act())
-        return actions
+            if isinstance(agent, TrainAgent):
+                yield agent.act()
 
-    def actions_to_effects(self, actions: list[MoveAction]) -> list[Effect]:
+    def actions_to_effects(self, actions) -> list[Effect]:
         effects = []
         for action in actions:
-            effects.append(
-                AddAndRemoveRelation(
-                    remove_relation=Relation(
-                        action.agent, action.agent.previous_position
-                    ),
-                    add_relation=Relation(action.agent, action.destination),
-                )
-            )
-        return effects
-
-    def actionsToEffects(self, actions) -> List[Effect]:
-        """Convert agent actions to effects"""
-        effects = []
-        for action in actions:
-            if action is not None:  # Skip if agent has no valid move
-                if isinstance(action, AddAndRemoveRelation):
-                    effects.append(action)
+            if action is not None and isinstance(action, AddAndRemoveRelation):
+                effects.append(action)
         return effects
 
     def relations_by_entity(self):
-        relations_by_entity = defaultdict(list)
+        relations_by_entity = defaultdict(int)
         for relation in self.relations:
-            relations_by_entity[relation.from_entity].append(relation)
-        return
+            relations_by_entity[relation.to_entity] += 0
+        return relations_by_entity
 
     def add_entity(self, entity: Agent):
         self.agents.append(entity)
@@ -276,46 +256,30 @@ class RailState(SystemState[Agent, Relation, RailResource]):
 
     def add_resource(self, resource: RailResource):
         self.resources.append(resource)
-
-
 @dataclass()
 class RailArbiter(Arbiter):
     rail_state: RailState
 
     def check_rules(self, effects: list[Effect]) -> list[Effect]:
         valid_effects: list[Effect] = []
+        relations_by_entity = self.rail_state.relations_by_entity()
+        
         for effect in effects:
             if isinstance(effect, AddAndRemoveRelation):
                 agent = effect.add_relation.from_entity
                 resource_to_add = effect.add_relation.to_entity
                 resource_to_remove = effect.remove_relation.to_entity
 
-                for entity in self.rail_state.relations_by_entity()[resource_to_add]:
-                    if isinstance(entity, TrainAgent):
-                        print(
-                            "conflict with between agents {} and {}".format(
-                                agent.id, entity.id
-                            )
-                        )
-                        continue
+                # Check if target resource is occupied
+                if relations_by_entity[resource_to_add] > 0:
+                    print(f"Resource {resource_to_add.id} is occupied")
+                    continue
 
-                # transition check
-                valid_transition = (
-                    resource_to_add.id
-                    in resource_to_remove.valid_routes[agent.previous_position]
-                )
-                if valid_transition:
-                    valid_effects.extend(
-                        [
-                            AddRelation(effect.add_relation),
-                            RemoveRelation(effect.remove_relation),
-                        ]
-                    )
-                print(
-                    "agent {} stopped at invalid transition {} -> {}".format(
-                        agent.id, agent.previous_position.id, agent.current_position.id
-                    )
-                )
+                # Check if transition is valid
+                if resource_to_add.id in resource_to_remove.valid_routes.get(agent.previous_position, []):
+                    valid_effects.append(effect)
+                else:
+                    print(f"Invalid transition from {resource_to_remove.id} to {resource_to_add.id}")
 
         return valid_effects
 

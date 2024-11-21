@@ -155,11 +155,47 @@ class RandomPolicy:
 @dataclass
 class TrainAgent(Agent):
     id: int
-    previous_position: RailResource
+    current_position: RailResource
+    previous_position: RailResource = None
+    policy: RandomPolicy = None
+    _state: Dict = None
+    _rules: Set = None
+    _objectives: Dict = None
 
-    def act(self):
-        next_position = self.previous_position.valid_routes[self.previous_position][0]
-        return MoveAction(self, next_position)
+    def __post_init__(self):
+        self._state = {
+            'current_position': self.current_position,
+            'previous_position': self.previous_position
+        }
+        self._rules = {
+            'valid_move': lambda next_pos: next_pos in self.current_position.valid_routes.get(self.current_position, [])
+        }
+        self._objectives = {
+            'reach_end': False
+        }
+
+    @property
+    def state(self):
+        return self._state
+
+    @property
+    def rules(self) -> Set[Any]:
+        return self._rules
+
+    @property
+    def objectives(self):
+        return self._objectives
+
+    def act(self) -> Effect:
+        next_position = self.policy.propose_next_position(self.current_position, self.previous_position)
+        print(next_position.id)
+        if next_position is None:
+            return None
+        
+        return AddAndRemoveRelation(
+            add_relation=Relation(from_entity=self, to_entity=next_position),
+            remove_relation=Relation(from_entity=self, to_entity=self.current_position)
+        )
 
 
 @dataclass()

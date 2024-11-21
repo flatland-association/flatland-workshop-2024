@@ -146,12 +146,12 @@ We collect trajectories with several trains and different map sizes and then rep
 our proposal.
 
 ## EnhanceTreeObsForRailEnv Objectives
-
-Control exploration by number of branches and not by number of cells to explore.
-Speed-up TreeObs: efficient data structure for "overlay" graph of decision points (for tree branches)
-Visualization of current state of overlay graph
-Add new features to TreeObsForRailEnv (currently 12)
-It should be easy to add new features
+[Description](https://github.com/flatland-association/flatland-rl/issues/89)
+* Control exploration by number of branches and not by number of cells to explore.
+* Speed-up TreeObs: efficient data structure for "overlay" graph of decision points (for tree branches)
+* Visualization of current state of overlay graph
+* Add new features to TreeObsForRailEnv (currently 12)
+* It should be easy to add new features
 
 ## Miscellaneous Considerations
 

@@ -40,18 +40,21 @@ This is the network after the trains have moved again:
 ## Open Questions
 - **Existing literature and libraries**
     - What exists and can be reused?
+    - We should do a literature review!
 - **Performance**
     - What do we gain with this new representation?
 - **Generality**
     - How general is this framework? (Other domains)
 - **Arbiter**
     - What do we do with conflicting atomic effects that happen later?
+    - What effects would we need (composite)?
 - **Graph structure**
     - Is the current double vertex graph the best graph implementation for this concept?
     - What do we gain from this graph structure?
     - What would be benefits of other grpah structures?
-- 
 
+## Next Steps
+- Who can contribute to this?
 ## Links
 
 - [Agent-based modeling via graph rewriting](https://blog.algebraicjulia.org/post/2023/07/graphical-schedule/)

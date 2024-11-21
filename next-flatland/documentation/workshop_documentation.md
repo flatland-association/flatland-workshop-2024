@@ -38,18 +38,19 @@ This is the network after the trains have moved again:
 
 
 ## Open Questions
-- Existing literature and libraries
+- **Existing literature and libraries**
     - What exists and can be reused?
-- Performance
+- **Performance**
     - What do we gain with this new representation?
-- Generality
+- **Generality**
     - How general is this framework? (Other domains)
-- Arbiter
+- **Arbiter**
     - What do we do with conflicting atomic effects that happen later?
-- Graph layout
+- **Graph structure**
     - Is the current double vertex graph the best graph implementation for this concept?
     - What do we gain from this graph structure?
     - What would be benefits of other grpah structures?
+- 
 
 ## Links
 

@@ -28,8 +28,14 @@ class ThreeDCoordinates:
         return ThreeDCoordinates(self.x - other.x, self.y - other.y, self.z - other.z)
 
     @classmethod
-    def create_mean_location_coordinates(cls: Type[T], coordinates: Collection[ThreeDCoordinates]) -> T:
-        return cls(mean(c.x for c in coordinates), mean(c.y for c in coordinates), mean(c.z for c in coordinates))
+    def create_mean_location_coordinates(
+        cls: Type[T], coordinates: Collection[ThreeDCoordinates]
+    ) -> T:
+        return cls(
+            mean(c.x for c in coordinates),
+            mean(c.y for c in coordinates),
+            mean(c.z for c in coordinates),
+        )
 
 
 @unique

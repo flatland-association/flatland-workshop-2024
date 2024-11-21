@@ -5,11 +5,12 @@ from abc import ABC
 from collections.abc import Iterable
 from dataclasses import asdict, dataclass, is_dataclass
 from types import UnionType
-from typing import Any, Generic, Iterator, Literal, NewType, Type, TypeVar, Union, get_args, get_origin, get_type_hints
+from typing import (Any, Generic, Iterator, Literal, NewType, Type, TypeVar,
+                    Union, get_args, get_origin, get_type_hints)
 
 import igraph
 
-from next_flatland.network.abc import NodeABC, LinkABC
+from next_flatland.network.abc import LinkABC, NodeABC
 from next_flatland.network.abc.debug import debug_plot
 from next_flatland.network.abc.link import BaseLinkType, EndNodeIdPair
 from next_flatland.network.abc.node import BaseNodeType, NodeId, NodeIndex
@@ -22,7 +23,9 @@ Self = TypeVar("Self", bound="ImmutableNetworkABC")
 LinkIndex = NewType("LinkIndex", int)
 
 VERTEX_NAME_IN_GRAPH: Literal["name"] = "name"  # is given by igraph library
-assert VERTEX_NAME_IN_GRAPH == "name"  # is given by igraph library and cannot be changed
+assert (
+    VERTEX_NAME_IN_GRAPH == "name"
+)  # is given by igraph library and cannot be changed
 
 
 @dataclass(init=False, frozen=True)
@@ -58,7 +61,12 @@ class ImmutableNetworkABC(Generic[NodeT, LinkT, NodeTypeT, LinkTypeT], ABC):
     @property
     def end_node_id_pair_iterator(self) -> Iterator[EndNodeIdPair]:
         return (
-            EndNodeIdPair((es.source_vertex[self._vertex_name_in_graph], es.target_vertex[self._vertex_name_in_graph]))
+            EndNodeIdPair(
+                (
+                    es.source_vertex[self._vertex_name_in_graph],
+                    es.target_vertex[self._vertex_name_in_graph],
+                )
+            )
             for es in self._underlying_digraph.es
         )  # noqa
 
@@ -90,10 +98,14 @@ class ImmutableNetworkABC(Generic[NodeT, LinkT, NodeTypeT, LinkTypeT], ABC):
     def node_by_id(self, n_id: NodeId) -> NodeT:
         return self.node_by_index(self.node_index_by_name(n_id))
 
-    def link_index_by_source_target(self, source: NodeId | NodeIndex, target: NodeId | NodeIndex) -> LinkIndex:
+    def link_index_by_source_target(
+        self, source: NodeId | NodeIndex, target: NodeId | NodeIndex
+    ) -> LinkIndex:
         return self._underlying_digraph.get_eid(source, target)
 
-    def link_source_target_by_index(self, idx: LinkIndex) -> tuple[NodeIndex, NodeIndex]:
+    def link_source_target_by_index(
+        self, idx: LinkIndex
+    ) -> tuple[NodeIndex, NodeIndex]:
         return self._underlying_digraph.es[idx].tuple
 
     def link_index_by_end_node_id_pair(self, end_nodes: EndNodeIdPair) -> LinkIndex:
@@ -102,28 +114,41 @@ class ImmutableNetworkABC(Generic[NodeT, LinkT, NodeTypeT, LinkTypeT], ABC):
     def edge_by_index(self, idx: LinkIndex) -> igraph.Edge:
         return self._underlying_digraph.es.find(idx)
 
-    def edge_by_source_target(self, source: NodeId | NodeIndex, target: NodeId | NodeIndex) -> igraph.Edge:
+    def edge_by_source_target(
+        self, source: NodeId | NodeIndex, target: NodeId | NodeIndex
+    ) -> igraph.Edge:
         return self._underlying_digraph.es.find(_from=source, _to=target)
 
     def link_by_index(self, idx: LinkIndex) -> LinkT:
         return self._underlying_digraph.es[self.link_attribute_name][idx]
 
-    def link_by_source_target(self, source_id: NodeId | NodeIndex, target_id: NodeId | NodeIndex) -> LinkT:
-        return self.link_by_index(self.link_index_by_source_target(source_id, target_id))
+    def link_by_source_target(
+        self, source_id: NodeId | NodeIndex, target_id: NodeId | NodeIndex
+    ) -> LinkT:
+        return self.link_by_index(
+            self.link_index_by_source_target(source_id, target_id)
+        )
 
     def link_by_end_node_id_pair(self, end_nodes: EndNodeIdPair) -> LinkT:
-        return self.link_by_index(self.link_index_by_source_target(end_nodes[0], end_nodes[1]))
+        return self.link_by_index(
+            self.link_index_by_source_target(end_nodes[0], end_nodes[1])
+        )
 
     def link_end_node_id_pair_by_index(self, index: LinkIndex) -> EndNodeIdPair:
         edge = self.edge_by_index(index)
         return EndNodeIdPair(
-            (edge.source_vertex[self._vertex_name_in_graph], edge.target_vertex[self._vertex_name_in_graph])
+            (
+                edge.source_vertex[self._vertex_name_in_graph],
+                edge.target_vertex[self._vertex_name_in_graph],
+            )
         )
 
     def link_by_end_node_iterator(self) -> Iterator[tuple[EndNodeIdPair, LinkT]]:
         return zip(self.end_node_id_pair_iterator, self.all_links)
 
-    def link_by_tuple_iterator(self) -> Iterator[tuple[tuple[NodeIndex, NodeIndex], LinkT]]:
+    def link_by_tuple_iterator(
+        self,
+    ) -> Iterator[tuple[tuple[NodeIndex, NodeIndex], LinkT]]:
         return zip((es.tuple for es in self._underlying_digraph.es), self.all_links)
 
     def in_degrees(self) -> list[int]:
@@ -136,7 +161,7 @@ class ImmutableNetworkABC(Generic[NodeT, LinkT, NodeTypeT, LinkTypeT], ABC):
         return self._underlying_digraph.degree()
 
     def incident_links_per_node(
-            self, idx: NodeId | NodeIndex, mode: Literal["in", "out", "all"] = "all"
+        self, idx: NodeId | NodeIndex, mode: Literal["in", "out", "all"] = "all"
     ) -> list[LinkT]:
         return [
             self._underlying_digraph.es[i][self.link_attribute_name]
@@ -144,14 +169,16 @@ class ImmutableNetworkABC(Generic[NodeT, LinkT, NodeTypeT, LinkTypeT], ABC):
         ]
 
     def incident_link_idx_per_node(
-            self, idx: NodeId | NodeIndex, mode: Literal["in", "out", "all"] = "all"
+        self, idx: NodeId | NodeIndex, mode: Literal["in", "out", "all"] = "all"
     ) -> list[LinkIndex]:
         return self._underlying_digraph.incident(vertex=idx, mode=mode)
 
-    def neighbors(self, idx: NodeId | NodeIndex, mode: Literal["in", "out", "all"] = "all") -> list[NodeT]:
-        return self._underlying_digraph.vs[self._underlying_digraph.neighbors(vertex=idx, mode=mode)][
-            self.node_attribute_name
-        ]
+    def neighbors(
+        self, idx: NodeId | NodeIndex, mode: Literal["in", "out", "all"] = "all"
+    ) -> list[NodeT]:
+        return self._underlying_digraph.vs[
+            self._underlying_digraph.neighbors(vertex=idx, mode=mode)
+        ][self.node_attribute_name]
 
     @classmethod
     def create_empty(cls: Type[Self]) -> Self:
@@ -165,7 +192,9 @@ class ImmutableNetworkABC(Generic[NodeT, LinkT, NodeTypeT, LinkTypeT], ABC):
         return self._underlying_digraph.vs.select(indexes)[self.node_attribute_name]
 
     def nodes_by_names(self, names: Iterable[NodeId]) -> list[NodeT]:
-        return self._underlying_digraph.vs.select(name_in=names)[self.node_attribute_name]
+        return self._underlying_digraph.vs.select(name_in=names)[
+            self.node_attribute_name
+        ]
 
     def links_by_indexes(self, indexes: Iterable[LinkIndex]) -> list[LinkT]:
         return self._underlying_digraph.es.select(indexes)[self.link_attribute_name]
@@ -176,7 +205,9 @@ class ImmutableNetworkABC(Generic[NodeT, LinkT, NodeTypeT, LinkTypeT], ABC):
             for graph in self._underlying_digraph.components(mode="weak").subgraphs()
         )
 
-    def debug_plot(self, file_name: str | None = None, with_labels: bool = True) -> None:
+    def debug_plot(
+        self, file_name: str | None = None, with_labels: bool = True
+    ) -> None:
         debug_plot(self._underlying_digraph, with_labels, file_name)
 
 
@@ -184,7 +215,9 @@ class ImmutableNetworkEncoder(json.JSONEncoder):
     def default(self, o) -> Any:
         if isinstance(o, igraph.Graph):
             igraph_dict = serialize_igraph(o)
-            igraph_dict["edge_attrs"] = {str(k): v for k, v in igraph_dict["edge_attrs"].items()}
+            igraph_dict["edge_attrs"] = {
+                str(k): v for k, v in igraph_dict["edge_attrs"].items()
+            }
             igraph_dict["__class__"] = "igraph.Graph"
             return igraph_dict
         if isinstance(o, NodeABC | LinkABC):
@@ -259,7 +292,9 @@ def dataclass_from_dict(cls: type, data: dict[str, Any] | Any) -> Any:
             result[f] = tuple(dataclass_from_dict(elem_type, item) for item in data[f])
         else:
             # Handle non-ellipsis types normally
-            result[f] = dataclass_from_dict(field_types[f], data[f]) if f in data else None
+            result[f] = (
+                dataclass_from_dict(field_types[f], data[f]) if f in data else None
+            )
     return cls(**result)
 
 
@@ -275,11 +310,19 @@ def serialize_igraph(graph: igraph.Graph) -> dict[str, Any]:
 
 
 def deserialize_igraph(data: dict[str, Any]) -> igraph.Graph:
-    edge_attr_keys = next(iter(data["edge_attrs"].values())).keys() if data["edge_attrs"] else []
-    edge_attrs = {k: [d[k] for d in data["edge_attrs"].values()] for k in edge_attr_keys}
+    edge_attr_keys = (
+        next(iter(data["edge_attrs"].values())).keys() if data["edge_attrs"] else []
+    )
+    edge_attrs = {
+        k: [d[k] for d in data["edge_attrs"].values()] for k in edge_attr_keys
+    }
 
-    vertex_attr_keys = next(iter(data["vertex_attrs"].values())).keys() if data["vertex_attrs"] else []
-    vertex_attrs = {k: [d[k] for d in data["vertex_attrs"].values()] for k in vertex_attr_keys}
+    vertex_attr_keys = (
+        next(iter(data["vertex_attrs"].values())).keys() if data["vertex_attrs"] else []
+    )
+    vertex_attrs = {
+        k: [d[k] for d in data["vertex_attrs"].values()] for k in vertex_attr_keys
+    }
 
     return igraph.Graph(
         n=data["node_count"],

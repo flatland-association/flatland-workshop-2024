@@ -1,4 +1,4 @@
 from .immutablenetwork_abc import ImmutableNetworkABC
-from .link import LinkABC, EndNodeIdPair
-from .mutablenetwork import MutableNetworkABC, LinkIndex
+from .link import EndNodeIdPair, LinkABC
+from .mutablenetwork import LinkIndex, MutableNetworkABC
 from .node import NodeABC, NodeId, NodeIndex

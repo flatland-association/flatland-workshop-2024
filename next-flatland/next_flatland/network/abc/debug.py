@@ -4,7 +4,10 @@ import igraph as ig
 
 
 def debug_plot(
-        graph: ig.Graph, with_labels: bool = True, file_name: str | None = None, weights: Sequence[float] | None = None
+    graph: ig.Graph,
+    with_labels: bool = True,
+    file_name: str | None = None,
+    weights: Sequence[float] | None = None,
 ) -> None:
     if with_labels:
         graph.vs["label"] = graph.vs["name"]
@@ -14,4 +17,6 @@ def debug_plot(
         k = graph.layout_sugiyama() if graph.is_dag() else graph.layout_auto()
 
     visual_style = {"layout": k, "bbox": (4000, 4000), "vertex_size": 3}
-    ig.plot(graph, **visual_style).save(file_name if file_name is not None else "debug.jpg")
+    ig.plot(graph, **visual_style).save(
+        file_name if file_name is not None else "debug.jpg"
+    )

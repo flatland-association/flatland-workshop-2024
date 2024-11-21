@@ -4,8 +4,9 @@ from next_flatland.network.state_network import StateLink, StateLinkType
 from next_flatland.network.state_network import StateNetwork
 from next_flatland.network.state_network import StateNode, StateNodeType
 from next_flatland.network.state_network.plot_3d import (
-    add_state_network_in_3d_to_figure,
+    add_state_network_in_3d_to_figure, compose_with_slider,
 )
+from next_flatland.plot import ColorMap
 
 RESOURCE_Z = -50
 NODE_DISTANCE = 20
@@ -33,7 +34,6 @@ def create_example_rail_network() -> StateNetwork:
     )
 
     for resource_index, (x, y) in resources:
-
         forward_node_id = NodeId(resource_index + "_forward")
         backward_node_id = NodeId(resource_index + "_backward")
         resource_node_id = NodeId(resource_index)
@@ -139,11 +139,23 @@ def create_example_rail_network() -> StateNetwork:
         )
     )
 
-    # Add the nodes and links to the system state network
     system_state_network = StateNetwork.create_new(nodes_to_add, links_to_add)
     return system_state_network
 
 
 if __name__ == "__main__":
     network = create_example_rail_network()
-    add_state_network_in_3d_to_figure(network).show()
+    color_map = ColorMap(
+        {
+            StateNodeType.RESOURCE.name: "green",
+            StateNodeType.INFRASTRUCTURE.name: "blue",
+            StateLinkType.ALLOCATION.name: "green",
+            StateLinkType.TRANSITION.name: "blue",
+            StateLinkType.OCCUPATION.name: "purple",
+        }
+    )
+    figure = add_state_network_in_3d_to_figure(network, color_map=color_map)
+    figure.show()
+    compose_with_slider(
+        (figure, figure)
+    ).show()

@@ -16,6 +16,16 @@ Worked on a simple prototype to test the concept in code.
 
 ![graph structure](img/graph_structure.jpg)
 
+![demo_initial](img/demo0.png)
+![demo_after](img/demo1.png)
+![demo_final](img/demo2.png)
+
+## Open Questions
+- Existing literature and libraries
+ - What exists and can be reused?
+- Arbiter
+ - What do we do with conflicting atomic effects that happen later?
+
 ## Links
 
 [Agent-based modeling via graph rewriting](https://blog.algebraicjulia.org/post/2023/07/graphical-schedule/)

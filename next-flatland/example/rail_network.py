@@ -129,19 +129,18 @@ def create_example_rail_network() -> StateNetwork:
     )
     links_to_add.append(
         (
-            EndNodeIdPair((NodeId("4_forward"), NodeId("7_forward"))),
+            EndNodeIdPair((NodeId("7_forward"), NodeId("4_forward"))),
             StateLink(link_type=StateLinkType.TRANSITION),
         )
     )
     links_to_add.append(
         (
-            EndNodeIdPair((NodeId("7_backward"), NodeId("4_backward"))),
+            EndNodeIdPair((NodeId("4_backward"), NodeId("7_backward"))),
             StateLink(link_type=StateLinkType.TRANSITION),
         )
     )
 
-    system_state_network = StateNetwork.create_new(nodes_to_add, links_to_add)
-    return system_state_network
+    return StateNetwork.create_new(nodes_to_add, links_to_add)
 
 
 if __name__ == "__main__":

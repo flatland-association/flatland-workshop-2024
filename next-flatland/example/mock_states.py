@@ -2,7 +2,11 @@ from example.rail_network import RESOURCE_Z, create_example_rail_network
 from next_flatland.network.abc.link import EndNodeIdPair
 from next_flatland.network.abc.node import NodeId
 from next_flatland.network.abc.node import ThreeDCoordinates
-from next_flatland.network.state_network import StateLink, StateLinkType, add_state_network_in_3d_to_figure
+from next_flatland.network.state_network import (
+    StateLink,
+    StateLinkType,
+    add_state_network_in_3d_to_figure,
+)
 from next_flatland.network.state_network.network import StateNetwork
 from next_flatland.network.state_network.node import StateNode, StateNodeType
 from next_flatland.network.state_network.plot_3d import compose_with_slider
@@ -30,7 +34,7 @@ BACKWARD_7 = NodeId("7_backward")
 
 
 def mock_state(
-        occupations: dict[NodeId, NodeId], reservations: dict[NodeId, NodeId]
+    occupations: dict[NodeId, NodeId], reservations: dict[NodeId, NodeId]
 ) -> StateNetwork:
     agent_1 = StateNode(
         id=AGENT_ID_1,
@@ -69,28 +73,31 @@ def mock_state(
 
 
 def create_mock_states() -> list[StateNetwork]:
-    return [mock_state(
-        occupations={AGENT_ID_1: FORWARD_0, AGENT_ID_2: BACKWARD_5},
-        reservations={AGENT_ID_1: FORWARD_1, AGENT_ID_2: BACKWARD_4},
-    ), mock_state(
-        occupations={AGENT_ID_1: FORWARD_1, AGENT_ID_2: BACKWARD_4},
-        reservations={AGENT_ID_1: FORWARD_2, AGENT_ID_2: BACKWARD_7},
-    ), mock_state(
-        occupations={AGENT_ID_1: FORWARD_2, AGENT_ID_2: BACKWARD_7},
-        reservations={AGENT_ID_1: FORWARD_3, AGENT_ID_2: BACKWARD_6},
-    ), mock_state(
-        occupations={AGENT_ID_1: FORWARD_3, AGENT_ID_2: BACKWARD_6},
-        reservations={AGENT_ID_1: FORWARD_4, AGENT_ID_2: BACKWARD_1},
-    )]
+    return [
+        mock_state(
+            occupations={AGENT_ID_1: FORWARD_0, AGENT_ID_2: BACKWARD_5},
+            reservations={AGENT_ID_1: FORWARD_1, AGENT_ID_2: BACKWARD_4},
+        ),
+        mock_state(
+            occupations={AGENT_ID_1: FORWARD_1, AGENT_ID_2: BACKWARD_4},
+            reservations={AGENT_ID_1: FORWARD_2, AGENT_ID_2: BACKWARD_7},
+        ),
+        mock_state(
+            occupations={AGENT_ID_1: FORWARD_2, AGENT_ID_2: BACKWARD_7},
+            reservations={AGENT_ID_1: FORWARD_3, AGENT_ID_2: BACKWARD_6},
+        ),
+        mock_state(
+            occupations={AGENT_ID_1: FORWARD_3, AGENT_ID_2: BACKWARD_6},
+            reservations={AGENT_ID_1: FORWARD_4, AGENT_ID_2: BACKWARD_1},
+        ),
+    ]
 
 
 def show_mock_states() -> None:
     figures = []
     for state_network in create_mock_states():
         figures.append(add_state_network_in_3d_to_figure(state_network))
-    compose_with_slider(
-        figures
-    ).show()
+    compose_with_slider(figures).show()
 
 
 if __name__ == "__main__":

@@ -5,11 +5,12 @@ The ideas of this work are to be verified through a functional software. The foc
 
 To prototypically implement the ideas found in the field of user interaction, user interface, and human-machine interaction, some basic prerequisites must be met:
 
-A simulation environment exists that allows disposition decisions (actions) to be made and which are then applied or implemented by the system, and the temporal course (including the impact of the actions) can be simulated through simulation.
-A disposition method exists that can make suggestions or directly execute a chain of actions with the simulation.
-A disposition method exists that can be controlled by optimization goals, which are currently of importance, e.g., minimizing train delays.
-A disposition method exists that can be interactively controlled by settings, determining which actions can be taken, including changing routes, stopping vehicles (agents waiting, etc.).
-Assuming that Flatland exists with an AI-supported planning agent, we began laying the foundation for the question of how we can make Flatland data more accessible to humans and how humans can communicate with the AI-supported planning agent so that it knows the optimization goals or how humans can influence the behavior of the AI agents through proactive or reactive control.
+- A simulation environment exists that allows disposition decisions (actions) to be made and which are then applied or implemented by the system, and the temporal course (including the impact of the actions) can be simulated through simulation.
+- A disposition method exists that can make suggestions or directly execute a chain of actions with the simulation.
+- A disposition method exists that can be controlled by optimization goals, which are currently of importance, e.g., minimizing train delays.
+- A disposition method exists that can be interactively controlled by settings, determining which actions can be taken, including changing routes, stopping vehicles (agents waiting, etc.).
+
+Assuming that Simulationsoftware (Flatland) exists with an AI-supported planning agent, we began laying the foundation for the question of how we can make Flatland data more accessible to humans and how humans can communicate with the AI-supported planning agent so that it knows the optimization goals or how humans can influence the behavior of the AI agents through proactive or reactive control.
 
 The interaction should be possible globally or at the agent level. This means that, on the one hand, we want to communicate the global goals to the system or dynamically adjust them, but also give each agent a strategy that differs from the global one. This means that different goals can be pursued at different levels or, depending on the importance of a train, which goals or priorities should be pursued for a specific train.
 

@@ -54,6 +54,14 @@ Missing values in present node are filled in with +inf (truncated).
 
 ![Graph Observation](GraphObs.png)
 
+## Efficient Implementation?
+
+The exploration is time-consuming.
+Alberto reaches branch-depth max 3 to stay within submission limit. Corresponds to "cell-depth" of 10-25.
+![Collapse dGraph](CollapsedGraph.png)
+
+For Alberto's MCTS, TreeObs is the bigger bottleneck than serialization/de-serialization of intermediate states.
+
 ## Ideation of additional features
 
 * n-shortest: weighted
@@ -69,3 +77,13 @@ Missing values in present node are filled in with +inf (truncated).
   a "baseline", from that point of view maybe start early, Alberto not blocked, question of priorities... Open:
     * look up shortest paths in current implementation
     * use Adrian's graph for shortest path computations in the core as well?
+    *
+
+## Tangible Outcomes
+
+* [Description (issue) of](https://github.com/flatland-association/flatland-rl/issues/89)
+  and [draft pr](https://github.com/flatland-association/flatland-rl/pull/90) of implementation in Flatland 3
+* [Description (issue) of episodes for performance benchmarking](https://github.com/flatland-association/flatland-rl/issues/92)
+* Take up Flatland dev coffee group (2 weekly) again
+    * Slack for instant messaging
+    * GitHub discussions 

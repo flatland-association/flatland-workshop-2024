@@ -140,7 +140,10 @@ def create_example_rail_network() -> StateNetwork:
         )
     )
 
-    return StateNetwork.create_new(nodes_to_add, links_to_add)
+    state_network = StateNetwork.create_new(nodes_to_add, links_to_add)
+    if not (validation_result := state_network.validate_topology()).succeeded:
+        raise ValueError(validation_result.answer)
+    return state_network
 
 
 if __name__ == "__main__":

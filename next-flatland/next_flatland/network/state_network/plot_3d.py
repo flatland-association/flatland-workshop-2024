@@ -39,9 +39,7 @@ def compose_with_slider(figures: Collection[go.Figure]) -> go.Figure:
         raise ValueError("The `figures` collection cannot be empty.")
 
     # Initialize the final figure and frames
-    final_fig = go.Figure(
-        frames=[go.Frame(data=fig.data, name=str(i)) for i, fig in enumerate(figures)]
-    )
+    final_fig = go.Figure(frames=[go.Frame(data=fig.data, name=str(i)) for i, fig in enumerate(figures)])
 
     # Add the initial data (first figure's data)
     final_fig.add_traces(figures[0].data)
@@ -121,15 +119,8 @@ def compose_with_slider(figures: Collection[go.Figure]) -> go.Figure:
     return final_fig
 
 
-def _compute_graph_traces(
-    network: StateNetwork, color_map: ColorMap | None = None
-) -> list[go.Scatter3d]:
-    edges_by_type = defaultdict(
-        lambda: {
-            _key: []
-            for _key in ["edge_x", "edge_y", "edge_z", "edge_line_name", "info"]
-        }
-    )
+def _compute_graph_traces(network: StateNetwork, color_map: ColorMap | None = None) -> list[go.Scatter3d]:
+    edges_by_type = defaultdict(lambda: {_key: [] for _key in ["edge_x", "edge_y", "edge_z", "edge_line_name", "info"]})
     nodes_by_id = {node.id: node for node in network.all_nodes}
     for end_node_pair, link in network.link_by_end_node_iterator():
         s_node = nodes_by_id[end_node_pair[0]]
@@ -162,9 +153,7 @@ def _compute_graph_traces(
         text = f"S:{s_node.id} T:{t_node.id},<br>link_type:{link.link_type}"
         edges_by_type[s_id]["info"].extend((text, text, text, None))
 
-    nodes_by_type = defaultdict(
-        lambda: {_key: [] for _key in ["node_x", "node_y", "node_z", "node_name"]}
-    )
+    nodes_by_type = defaultdict(lambda: {_key: [] for _key in ["node_x", "node_y", "node_z", "node_name"]})
 
     for node in network.all_nodes:
         s_id = node.node_type.name
@@ -173,11 +162,7 @@ def _compute_graph_traces(
         nodes_by_type[s_id]["node_y"].append(node.coordinates.y)
         nodes_by_type[s_id]["node_name"].append(f"{node.id} {node.node_type.name}")
 
-    color_map = (
-        create_colormap(nodes_by_type.keys() | edges_by_type.keys())
-        if color_map is None
-        else color_map
-    )
+    color_map = create_colormap(nodes_by_type.keys() | edges_by_type.keys()) if color_map is None else color_map
 
     edge_traces = [
         go.Scatter3d(

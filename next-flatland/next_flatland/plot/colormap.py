@@ -7,13 +7,9 @@ from plotly import express as px
 ColorMap = NewType("ColorMap", dict[Hashable, str])
 
 
-def create_colormap(
-    elements: Collection[Hashable], default_color: str | None = None
-) -> ColorMap:
+def create_colormap(elements: Collection[Hashable], default_color: str | None = None) -> ColorMap:
     count = len(elements)
-    colors = sample_colorscale(
-        px.colors.cyclical.Phase, samplepoints=[i / count for i in range(0, count)]
-    )
+    colors = sample_colorscale(px.colors.cyclical.Phase, samplepoints=[i / count for i in range(0, count)])
     if default_color is None:
         return ColorMap({key: color for key, color in zip(elements, colors)})
     cmap = defaultdict(lambda: default_color)

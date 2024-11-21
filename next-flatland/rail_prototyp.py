@@ -3,12 +3,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from collections import defaultdict
 import random
-from typing import Dict, List, Set, Any
+from typing import Dict, List, Set, Any, TypeVar
 from gen_env import (
     Agent,
     Arbiter,
     Effect,
     Agent,
+    Entity,
     GenEnvSimulation,
     Relation,
     Resource,
@@ -37,7 +38,7 @@ class RailResource(Resource):
 
 @dataclass()
 class MoveAction:
-    agent: Agent
+    agent: TrainAgent
     destination: RailResource
 
 
@@ -164,15 +165,14 @@ class TrainAgent(Agent):
 
     def __post_init__(self):
         self._state = {
-            'current_position': self.current_position,
-            'previous_position': self.previous_position
+            "current_position": self.current_position,
+            "previous_position": self.previous_position,
         }
         self._rules = {
-            'valid_move': lambda next_pos: next_pos in self.current_position.valid_routes.get(self.current_position, [])
+            "valid_move": lambda next_pos: next_pos
+            in self.current_position.valid_routes.get(self.current_position, [])
         }
-        self._objectives = {
-            'reach_end': False
-        }
+        self._objectives = {"reach_end": False}
 
     @property
     def state(self):
@@ -187,21 +187,24 @@ class TrainAgent(Agent):
         return self._objectives
 
     def act(self) -> Effect:
-        next_position = self.policy.propose_next_position(self.current_position, self.previous_position)
+        next_position = self.policy.propose_next_position(
+            self.current_position, self.previous_position
+        )
         print(next_position.id)
         if next_position is None:
             return None
-        
+
         return AddAndRemoveRelation(
             add_relation=Relation(from_entity=self, to_entity=next_position),
-            remove_relation=Relation(from_entity=self, to_entity=self.current_position)
+            remove_relation=Relation(from_entity=self, to_entity=self.current_position),
         )
 
 
 @dataclass()
-class AddAndRemoveRelation(Effect):
-    add_relation: Relation
-    remove_relation: Relation
+class MoveEffect(Effect):
+    entity: Entity
+    from_position: Resource
+    to_position: Resource
 
 
 @dataclass()
@@ -212,7 +215,6 @@ class AddRelation(Effect):
 @dataclass()
 class RemoveRelation(Effect):
     relation: Relation
-
 
 
 class RailState(SystemState[Agent, Relation, RailResource]):
@@ -235,8 +237,13 @@ class RailState(SystemState[Agent, Relation, RailResource]):
     def actions_to_effects(self, actions) -> list[Effect]:
         effects = []
         for action in actions:
-            if action is not None and isinstance(action, AddAndRemoveRelation):
-                effects.append(action)
+            effects.append(
+                MoveEffect(
+                    entity=action.agent,
+                    from_position=action.agent.previous_position,
+                    to_position=action.destination,
+                )
+            )
         return effects
 
     def relations_by_entity(self):
@@ -256,6 +263,8 @@ class RailState(SystemState[Agent, Relation, RailResource]):
 
     def add_resource(self, resource: RailResource):
         self.resources.append(resource)
+
+
 @dataclass()
 class RailArbiter(Arbiter):
     rail_state: RailState
@@ -263,23 +272,33 @@ class RailArbiter(Arbiter):
     def check_rules(self, effects: list[Effect]) -> list[Effect]:
         valid_effects: list[Effect] = []
         relations_by_entity = self.rail_state.relations_by_entity()
-        
-        for effect in effects:
-            if isinstance(effect, AddAndRemoveRelation):
-                agent = effect.add_relation.from_entity
-                resource_to_add = effect.add_relation.to_entity
-                resource_to_remove = effect.remove_relation.to_entity
 
-                # Check if target resource is occupied
-                if relations_by_entity[resource_to_add] > 0:
-                    print(f"Resource {resource_to_add.id} is occupied")
-                    continue
+        for effect in effects:
+            if isinstance(effect, MoveEffect):
+                agent = effect.entity
+                from_position = effect.from_position
+                to_position = effect.to_position
+
+                for entity in (
+                    self.rail_state.resource_occupancy[to_position] is not None
+                ):
+                    if isinstance(entity, TrainAgent):
+                        print(
+                            "conflict with between agents {} and {}".format(
+                                agent.id, entity.id
+                            )
+                        )
+                        continue
 
                 # Check if transition is valid
-                if resource_to_add.id in resource_to_remove.valid_routes.get(agent.previous_position, []):
+                if resource_to_add.id in resource_to_remove.valid_routes.get(
+                    agent.previous_position, []
+                ):
                     valid_effects.append(effect)
                 else:
-                    print(f"Invalid transition from {resource_to_remove.id} to {resource_to_add.id}")
+                    print(
+                        f"Invalid transition from {resource_to_remove.id} to {resource_to_add.id}"
+                    )
 
         return valid_effects
 
@@ -299,7 +318,7 @@ class RailPropagator(Propagator):
         dones = {}
 
         for effect in effects:
-            if isinstance(effect, AddAndRemoveRelation):
+            if isinstance(effect, MoveEffect):
                 agent = effect.add_relation.from_entity
                 next_position = effect.add_relation.to_entity
                 current_position = effect.remove_relation.to_entity

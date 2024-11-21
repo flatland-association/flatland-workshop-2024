@@ -33,7 +33,6 @@ def create_example_rail_network() -> StateNetwork:
     )
 
     for resource_index, (x, y) in resources:
-
         forward_node_id = NodeId(resource_index + "_forward")
         backward_node_id = NodeId(resource_index + "_backward")
         resource_node_id = NodeId(resource_index)
@@ -157,5 +156,5 @@ if __name__ == "__main__":
     figure = add_state_network_in_3d_to_figure(network, color_map=color_map)
     figure.show()
     compose_with_slider(
-        (figure,figure)
+        (figure, figure)
     ).show()

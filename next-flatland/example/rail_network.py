@@ -12,6 +12,7 @@ NODE_DISTANCE = 20
 TRACK_LOW_Y = 0
 TRACK_HIGH_Y = 50
 BACKWARD_OFFSET = 10
+AGENT_Z = 100
 
 
 def create_example_rail_network() -> StateNetwork:

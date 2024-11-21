@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from collections import defaultdict
 import random
 from typing import Dict, List, Set, Any, TypeVar
+from example.rail_network import AGENT_Z, create_example_rail_network
 from gen_env import (
     Agent,
     Arbiter,
@@ -16,311 +17,121 @@ from gen_env import (
     SystemState,
     Propagator,
 )
-import networkx as nx
-import matplotlib.pyplot as plt
+
+from next_flatland.network.abc.immutablenetwork_abc import LinkIndex
+from next_flatland.network.abc.link import EndNodeIdPair
+from next_flatland.network.abc.node import NodeId, ThreeDCoordinates
+from next_flatland.network.state_network.link import StateLink, StateLinkType
+from next_flatland.network.state_network.network import StateNetwork
+from next_flatland.network.state_network.node import StateNode, StateNodeType
 
 
 @dataclass()
-class RailResource(Resource):
-    id: int
-    valid_routes: dict[Resource, list[Resource]]
-    x: int
-    y: int
-
-    def __hash__(self):
-        return hash(self.id)
-
-    def __eq__(self, other):
-        if isinstance(other, RailResource):
-            return self.id == other.id
-        return False
+class Action:
+    pass
 
 
 @dataclass()
-class MoveAction:
-    agent: TrainAgent
-    destination: RailResource
+class MoveAction(Action):
+    agent: StateNode
+    destination: StateNode
+
+    def __post_init__(self):
+        assert self.agent.node_type == StateNodeType.AGENT
+        assert self.destination.node_type == StateNodeType.INFRASTRUCTURE
 
 
-class RailNetwork:
-    def __init__(self):
-        self.coordinates = [
-            (0, 0),
-            (1, 0),
-            (2, 0),
-            (3, 0),
-            (4, 0),
-            (5, 0),
-            (2, 1),
-            (3, 1),
-        ]
-        self.resources = [
-            RailResource(id=i, valid_routes={}, x=coord[0], y=coord[1])
-            for i, coord in enumerate(self.coordinates)
-        ]
-        self.relations = []
-        self._initialize_routes()
-        self._initialize_relations()
-
-    def _initialize_routes(self):
-        """
-             6 7
-             - - 
-           /     \ 
-        - -  - -  - -
-        0 1  2 3  4 5
-        """
-        # Define valid routes for straight line 0->1->2->3->4->5
-        for i in range(1, 4):
-            self.resources[i].valid_routes[self.resources[i - 1]] = [self.resources[i]]
-            self.resources[i + 1].valid_routes[self.resources[i + 1]] = [
-                self.resources[i]
-            ]
-
-        self.resources[0].valid_routes[self.resources[0]] = [self.resources[1]]
-        self.resources[5].valid_routes[self.resources[5]] = [self.resources[4]]
-
-        # Define valid routes for straight line 6->7
-        self.resources[6].valid_routes[self.resources[1]] = [self.resources[7]]
-        self.resources[7].valid_routes[self.resources[4]] = [self.resources[6]]
-        self.resources[6].valid_routes[self.resources[7]] = [self.resources[1]]
-        self.resources[7].valid_routes[self.resources[6]] = [self.resources[4]]
-
-        # Add switch connections
-        # At resource 1 (connecting to 6)
-        self.resources[1].valid_routes[self.resources[0]] = [
-            self.resources[2],
-            self.resources[6],
-        ]
-        self.resources[1].valid_routes[self.resources[2]] = [self.resources[0]]
-        self.resources[1].valid_routes[self.resources[6]] = [self.resources[0]]
-
-        # At resource 4 (connecting to 7)
-        self.resources[4].valid_routes[self.resources[5]] = [
-            self.resources[3],
-            self.resources[7],
-        ]
-        self.resources[4].valid_routes[self.resources[3]] = [self.resources[5]]
-        self.resources[4].valid_routes[self.resources[7]] = [self.resources[5]]
-
-    def create_network(self):
-        system_state_network = SSNetwork().create_empty()
-        nodes_to_add = []
-        links_to_add = []
-
-        start_resource = self.resources[0]
-        end_resource = self.resources[-1]
-
-        while True:
-            next_resource = start_resource.valid_routes.get(start_resource)
-        for resource in self.resources:
-            resource.valid_routes[]
-            nodes_to_add.append(
-                InfrastructureNode(
-                    coordinates=Coordinates(x=resource.x, y=resource.y),
-                )
-            )
-            for dest in resource.valid_routes.get(resource, []):
-                links_to_add.append(
-                    {"source": resource.id, "target": dest.id, "type": "route"}
-                )
-        
+@dataclass()
+class NoAction(Action):
+    pass
 
 
-    def get_resources(self):
-        return self.resources
+@dataclass()
+class MoveEffect(Effect):
+    edge_to_add: EndNodeIdPair
+    edge_to_remove: EndNodeIdPair
 
-    def get_relations(self):
-        return self.relations
 
-    def plot_network(self):
-        G = nx.DiGraph()
-        for resource in self.resources:
-            G.add_node(resource.id, pos=(resource.x, resource.y))
-            for dest in resource.valid_routes.get(resource, []):
-                G.add_edge(resource.id, dest.id)
+@dataclass()
+class AddEdge(Effect):
+    edge: EndNodeIdPair
 
-        pos = nx.get_node_attributes(G, "pos")
-        nx.draw(
-            G,
-            pos,
-            with_labels=True,
-            node_size=700,
-            node_color="skyblue",
-            font_size=10,
-            font_weight="bold",
-        )
-        plt.show()
+
+@dataclass()
+class RemoveEdge(Effect):
+    edge: EndNodeIdPair
 
 
 @dataclass
 class RandomPolicy:
     def propose_next_position(
-        self, current_position: RailResource, previous_position: RailResource
-    ) -> RailResource:
-        possible_resources = list(current_position.valid_routes[current_position])
-        if previous_position in possible_resources:
-            possible_resources.remove(previous_position)
-        if not possible_resources:
+        self, agent_id: NodeId, state: StateNetwork
+    ) -> StateNode | None:
+        # this only works if the agent doesn't have any reservations (a single occupation)
+        current_position = state.neighbors(agent_id, "out")[0]
+        possible_next_positions = state.neighbors(current_position.id, "out")
+        possible_next_positions = list(
+            filter(
+                lambda x: x.node_type == StateNodeType.INFRASTRUCTURE,
+                possible_next_positions,
+            )
+        )
+        if not possible_next_positions:
             return None
-        return random.choice(possible_resources)
+
+        return random.choice(list(possible_next_positions))
 
 
 @dataclass
 class TrainAgent(Agent):
     id: int
-    current_position: RailResource
-    previous_position: RailResource = None
-    policy: RandomPolicy = None
-    _state: Dict = None
-    _rules: Set = None
-    _objectives: Dict = None
+    policy: RandomPolicy = RandomPolicy()
 
-    def __post_init__(self):
-        self._state = {
-            "current_position": self.current_position,
-            "previous_position": self.previous_position,
-        }
-        self._rules = {
-            "valid_move": lambda next_pos: next_pos
-            in self.current_position.valid_routes.get(self.current_position, [])
-        }
-        self._objectives = {"reach_end": False}
+    def __init__(self, id: int):
+        self.id = id
 
-    @property
-    def state(self):
-        return self._state
-
-    @property
-    def rules(self) -> Set[Any]:
-        return self._rules
-
-    @property
-    def objectives(self):
-        return self._objectives
-
-    def act(self) -> Effect:
-        next_position = self.policy.propose_next_position(
-            self.current_position, self.previous_position
-        )
-        print(next_position.id)
+    def act(self, state: StateNetwork) -> Action:
+        agent = state.node_by_id(NodeId(f"agent_{self.id}"))
+        next_position = self.policy.propose_next_position(agent.id, state)
         if next_position is None:
-            return None
+            return NoAction()
 
-        return MoveEffect(
-            entity=self,
-            from_position=self.current_position,
-            to_position=next_position,
-        )
-
-
-@dataclass()
-class MoveEffect(Effect):
-    entity: TrainAgent
-    from_position: RailResource
-    to_position: RailResource
-
-
-@dataclass()
-class AddRelation(Effect):
-    relation: Relation
-
-
-@dataclass()
-class RemoveRelation(Effect):
-    relation: Relation
-
-
-class RailState(SystemState[Agent, Relation, RailResource]):
-    def __init__(
-        self,
-        agents: list[Agent],
-        relations: list[Relation],
-        resources: list[RailResource],
-    ):
-        self.agents = agents
-        self.relations = relations
-        self.resources = resources
-
-    def pull_actions(self):
-        """Pull actions from all agents"""
-        for agent in self.agents:
-            if isinstance(agent, TrainAgent):
-                yield agent.act()
-
-    def actions_to_effects(self, actions) -> list[Effect]:
-        effects = []
-        for action in actions:
-            effects.append(
-                MoveEffect(
-                    entity=action.agent,
-                    from_position=action.agent.previous_position,
-                    to_position=action.destination,
-                )
-            )
-        return effects
-
-    def relations_by_entity(self):
-        relations_by_entity = defaultdict(int)
-        for relation in self.relations:
-            relations_by_entity[relation.to_entity] += 0
-        return relations_by_entity
-
-    def add_agent(self, agent: Agent):
-        self.agents.append(agent)
-
-    def add_relation(self, from_entity: Entity, to_entity: Entity):
-        self.relations.append(Relation(from_entity, to_entity))
-
-    def remove_relation(self, from_entity: Entity, to_entity: Entity):
-        self.relations.remove(Relation(from_entity, to_entity))
-
-    def add_resource(self, resource: RailResource):
-        self.resources.append(resource)
+        return MoveAction(agent, next_position)
 
 
 @dataclass()
 class RailArbiter(Arbiter):
-    rail_state: RailState
-
-    def check_rules(self, effects: list[Effect]) -> list[Effect]:
+    def check_rules(self, state: StateNetwork, effects: list[Effect]) -> list[Effect]:
         valid_effects: list[Effect] = []
-        relations_by_entity = self.rail_state.relations_by_entity()
 
         for effect in effects:
             if isinstance(effect, MoveEffect):
-                agent = effect.entity
-                from_position = effect.from_position
-                to_position = effect.to_position
+                agent_id, curr_infra_id = effect.edge_to_remove
+                agent_id, next_infra_id = effect.edge_to_add
 
-                for entity in (
-                    self.rail_state.resource_occupancy[to_position] is not None
-                ):
-                    print(
-                        "conflict with between agents {} and {}".format(
-                            agent.id, entity.id
-                        )
-                    )
+                # is transition valid
+                valid_transition = next_infra_id in [
+                    node.id for node in state.neighbors(curr_infra_id, "out")
+                ]
+                if not valid_transition:
+                    print(f"Invalid transition from {curr_infra_id} to {next_infra_id}")
                     continue
 
-                # Check if transition is valid
-                if resource_to_add.id in resource_to_remove.valid_routes.get(
-                    agent.previous_position, []
-                ):
-                    valid_effects.append(effect)
-                else:
-                    print(
-                        f"Invalid transition from {resource_to_remove.id} to {resource_to_add.id}"
-                    )
+                valid_effects.extend(
+                    [
+                        AddEdge(edge=effect.edge_to_add),
+                        RemoveEdge(edge=effect.edge_to_remove),
+                    ]
+                )
 
         return valid_effects
 
 
 @dataclass
 class RailPropagator(Propagator):
-    rail_state: RailState
-
-    def propagate(self, effects: List[Effect]) -> Dict[Agent, bool]:
+    def propagate(
+        self, state: StateNetwork, effects: List[Effect]
+    ) -> Dict[Agent, bool]:
         """
         Propagates effects by:
         - Validating effect types
@@ -329,50 +140,88 @@ class RailPropagator(Propagator):
         - Tracking completion status
         """
         dones = {}
+        links_to_add: list[tuple[EndNodeIdPair, StateLink]] = []
+        links_to_remove: list[LinkIndex] = []
 
         for effect in effects:
-            if isinstance(effect, MoveEffect):
-                agent = effect.entity
-                next_position = effect.to_position
-                current_position = effect.from_position
+            if isinstance(effect, AddEdge):
+                links_to_add.append(
+                    (effect.edge, StateLink(link_type=StateLinkType.OCCUPATION))
+                )
+            if isinstance(effect, RemoveEdge):
+                links_to_remove.append(
+                    state.link_index_by_end_node_id_pair(effect.edge)
+                )
 
-                agent.previous_position = current_position
-                agent.current_position = next_position
-
-                # Update relations in rail state
-                self.rail_state.remove_relation(agent, current_position)
-                self.rail_state.add_relation(agent, next_position)
-
-                # Track if agent has completed its objective
-                dones[agent] = False  # Could be updated based on objectives
+        state.delete_links(links_to_remove)
+        state.add_links(links_to_add)
 
         return dones
 
 
+@dataclass(slots=True)
+class RailState(SystemState):
+    state: StateNetwork
+    agents: list[TrainAgent]
+
+    def __init__(self, state: StateNetwork):
+        self.state = state
+        self.agents = []
+
+    def actions_to_effects(self, actions: list[Action]) -> list[Effect]:
+        effects = []
+        for action in actions:
+            if isinstance(action, MoveAction):
+                agent_id = action.agent.id
+                curr_infra_id = self.state.neighbors(action.agent.id, "out")[0].id
+                next_infra_id = action.destination.id
+                effects.append(
+                    MoveEffect(
+                        edge_to_add=EndNodeIdPair((agent_id, next_infra_id)),
+                        edge_to_remove=EndNodeIdPair((agent_id, curr_infra_id)),
+                    )
+                )
+
+        return effects
+
+    def pull_actions(self):
+        actions = []
+        for agent in self.agents:
+            actions.append(agent.act(self.state))
+        return actions
+
+    def add_agent_to_network(self, agent: TrainAgent, infrastructure_id: NodeId):
+        self.agents.append(agent)
+        agent_node_id = NodeId(f"agent_{agent.id}")
+        self.state.add_nodes(
+            [
+                StateNode(
+                    id=agent_node_id,
+                    node_type=StateNodeType.AGENT,
+                    coordinates=ThreeDCoordinates(x=agent.id * 10, y=20, z=AGENT_Z),
+                )
+            ]
+        )
+        self.state.add_links(
+            [
+                (
+                    EndNodeIdPair((agent_node_id, infrastructure_id)),
+                    StateLink(link_type=StateLinkType.OCCUPATION),
+                )
+            ]
+        )
+
+
 # Example usage
 if __name__ == "__main__":
-    rail_network = RailNetwork()
-    initial_position = [rail_network.resources[0], rail_network.resources[5]]
+    rail_network = create_example_rail_network()
+    agents = [TrainAgent(id=i) for i in range(2)]
+    rail_state = RailState(state=rail_network)
+    rail_state.add_agent_to_network(agents[0], NodeId("0_forward"))
+    rail_state.add_agent_to_network(agents[1], NodeId("5_backward"))
 
-    # Create agents with random policy
-    agents = [
-        TrainAgent(
-            id=i,
-            current_position=initial_position[i],
-            previous_position=initial_position[i],
-            policy=RandomPolicy(),
-        )
-        for i in range(2)
-    ]
-
-    # Setup simulation components
-    rail_state = RailState(
-        agents=agents,
-        relations=rail_network.relations,
-        resources=rail_network.resources,
-    )
-    rail_arbiter = RailArbiter(rail_state=rail_state)
-    rail_propagator = RailPropagator(rail_state=rail_state)
+    rail_arbiter = RailArbiter()
+    rail_propagator = RailPropagator()
 
     # Create and run simulation
     simulation = GenEnvSimulation(

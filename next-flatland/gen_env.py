@@ -2,34 +2,18 @@ from abc import abstractmethod, ABCMeta
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import Set, Generic, TypeVar, Any, List, Dict
+import plotly.graph_objects as go
+
+
+from next_flatland.network.state_network.network import StateNetwork
+from next_flatland.network.state_network.plot_3d import (
+    add_state_network_in_3d_to_figure,
+)
 
 
 # TODO type hints and generics domain-agnostic
 class Entity(metaclass=ABCMeta):
-    @property
-    @abstractmethod
-    def state(self):
-        """
-        The internal state representing the entity's own dynamics/attributes.
-        """
-        raise NotImplementedError()
-
-    @property
-    @abstractmethod
-    def rules(self) -> Set[Any]:
-        """
-                A set of internal rules to determine if a proposed effect with the current entity is allowed
-        or not.
-        """
-        raise NotImplementedError()
-
-    @property
-    @abstractmethod
-    def objectives(self):
-        """
-        Objective influences the action posed on the entity.
-        """
-        raise NotImplementedError()
+    pass
 
 
 class Resource(Entity):
@@ -58,6 +42,23 @@ class Resource(Entity):
         return self._objectives
 
 
+@dataclass()
+class Effect:
+    """
+        An effect is a proposed modification of the current state. It can only do the following:
+    Change internal state of entities
+    Add/remove relations
+    Add/remove entities
+    For example, a movement of a train is an effect that proposes the following changes
+    Remove the relation between the current track and the train
+    Add a new relation to the new track it wants to travel to
+    A breakdown of a train or an agent is equivalent to Change internal state from operating to
+    malfunction
+    """
+
+    pass
+
+
 class Agent(Entity):
     """
         Agents drive the internal dynamics of the system. An agent has a policy , which is a
@@ -65,16 +66,8 @@ class Agent(Entity):
     Agent is the only entity that can propose an action to modify the system.
     """
 
-    @property
     @abstractmethod
-    def policy(self):
-        """
-        Objective influences the action posed on the entity.
-        """
-        raise NotImplementedError()
-
-    @abstractmethod
-    def act(self):
+    def act(self, state: StateNetwork):
         """
                 An agent takes its current observable environment into account and proposes an action that tries
         to trigger an effect based on its policy .
@@ -133,22 +126,6 @@ class SystemSnapshot(Generic[EntityType, RelationType]):
         return self.relations
 
 
-class Effect:
-    """
-        An effect is a proposed modification of the current state. It can only do the following:
-    Change internal state of entities
-    Add/remove relations
-    Add/remove entities
-    For example, a movement of a train is an effect that proposes the following changes
-    Remove the relation between the current track and the train
-    Add a new relation to the new track it wants to travel to
-    A breakdown of a train or an agent is equivalent to Change internal state from operating to
-    malfunction
-    """
-
-    pass
-
-
 EffectsType = TypeVar("EffectsType", bound=Effect)
 
 
@@ -167,7 +144,7 @@ class Arbiter:
     """
 
     @abstractmethod
-    def check_rules(self, effects: List[Effect]) -> List[Effect]:
+    def check_rules(self, state: StateNetwork, effects: List[Effect]) -> List[Effect]:
         raise NotImplementedError()
 
 
@@ -179,15 +156,14 @@ class Propagator:
     """
 
     @abstractmethod
-    def propagate(self, effects: List[Effect]):
+    def propagate(self, state: StateNetwork, effects: List[Effect]):
         raise NotImplementedError()
 
 
 @dataclass()
 class SystemState(Generic[AgentType, RelationType, ResourceType]):
     agents: list[AgentType]
-    relations: list[RelationType]
-    resources: list[ResourceType]
+    state: StateNetwork
 
     @abstractmethod
     def actions_to_effects(self, actions):
@@ -196,12 +172,6 @@ class SystemState(Generic[AgentType, RelationType, ResourceType]):
     @abstractmethod
     def pull_actions(self):
         raise NotImplementedError()
-
-    def relations_by_entity(self):
-        relations_by_entity = defaultdict(list)
-        for relation in self.relations:
-            relations_by_entity[relation.from_entity].append(relation)
-        return relations_by_entity
 
 
 class GenEnvSimulation:
@@ -215,16 +185,20 @@ class GenEnvSimulation:
     def addEffects(self, effects: List[Effect]):
         self.queue.extend(effects)
 
-    def run(self):
+    def run(self, figures: list[go.Figure] | None = None):
         dones = self.step()
+        if isinstance(figures, list):
+            figures.append(add_state_network_in_3d_to_figure(self.state.state))
 
         while not (all(dones.values())):
             self.queue.clear()
             dones = self.step()
+            if isinstance(figures, list):
+                figures.append(add_state_network_in_3d_to_figure(self.state.state))
 
     def step(self):
         self.addEffects(self.state.actions_to_effects(self.state.pull_actions()))
         # TODO malfuntion/env
-        self.queue = self.arbiter.check_rules(self.queue)
-        dones = self.propagator.propagate(self.queue)
+        self.queue = self.arbiter.check_rules(self.state.state, self.queue)
+        dones = self.propagator.propagate(self.state.state, self.queue)
         return dones

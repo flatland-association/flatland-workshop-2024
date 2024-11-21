@@ -13,6 +13,10 @@ pandas = "^2.2.3"
 pycairo = "1.21.0"
 
 
+[tool.poetry.group.dev.dependencies]
+black = "^24.10.0"
+isort = "^5.13.2"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

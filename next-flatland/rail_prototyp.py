@@ -24,6 +24,9 @@ from next_flatland.network.abc.node import NodeId, ThreeDCoordinates
 from next_flatland.network.state_network.link import StateLink, StateLinkType
 from next_flatland.network.state_network.network import StateNetwork
 from next_flatland.network.state_network.node import StateNode, StateNodeType
+from next_flatland.network.state_network.plot_3d import (
+    add_state_network_in_3d_to_figure,
+)
 
 
 @dataclass()
@@ -139,7 +142,7 @@ class RailPropagator(Propagator):
         - Updating rail state relations
         - Tracking completion status
         """
-        dones = {}
+        dones = {"agent": True}
         links_to_add: list[tuple[EndNodeIdPair, StateLink]] = []
         links_to_remove: list[LinkIndex] = []
 
@@ -152,6 +155,7 @@ class RailPropagator(Propagator):
                 links_to_remove.append(
                     state.link_index_by_end_node_id_pair(effect.edge)
                 )
+            dones["agent"] = False
 
         state.delete_links(links_to_remove)
         state.add_links(links_to_add)
@@ -219,6 +223,7 @@ if __name__ == "__main__":
     rail_state = RailState(state=rail_network)
     rail_state.add_agent_to_network(agents[0], NodeId("0_forward"))
     rail_state.add_agent_to_network(agents[1], NodeId("5_backward"))
+    add_state_network_in_3d_to_figure(rail_state.state).show()
 
     rail_arbiter = RailArbiter()
     rail_propagator = RailPropagator()

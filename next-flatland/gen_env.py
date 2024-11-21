@@ -4,6 +4,9 @@ from dataclasses import dataclass
 from typing import Set, Generic, TypeVar, Any, List, Dict
 
 from next_flatland.network.state_network.network import StateNetwork
+from next_flatland.network.state_network.plot_3d import (
+    add_state_network_in_3d_to_figure,
+)
 
 
 # TODO type hints and generics domain-agnostic
@@ -182,10 +185,14 @@ class GenEnvSimulation:
 
     def run(self):
         dones = self.step()
+        add_state_network_in_3d_to_figure(self.state.state).show()
+        ...
 
         while not (all(dones.values())):
             self.queue.clear()
             dones = self.step()
+            add_state_network_in_3d_to_figure(self.state.state).show()
+            ...
 
     def step(self):
         self.addEffects(self.state.actions_to_effects(self.state.pull_actions()))

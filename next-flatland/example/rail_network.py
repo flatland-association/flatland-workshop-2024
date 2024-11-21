@@ -4,7 +4,8 @@ from next_flatland.network.state_network import StateLink, StateLinkType
 from next_flatland.network.state_network import StateNetwork
 from next_flatland.network.state_network import StateNode, StateNodeType
 from next_flatland.network.state_network.plot_3d import (
-    add_state_network_in_3d_to_figure, compose_with_slider,
+    add_state_network_in_3d_to_figure,
+    compose_with_slider,
 )
 from next_flatland.plot import ColorMap
 
@@ -13,7 +14,7 @@ NODE_DISTANCE = 20
 TRACK_LOW_Y = 0
 TRACK_HIGH_Y = 50
 BACKWARD_OFFSET = 10
-AGENT_Z = 100
+AGENT_Z = 40
 
 
 def create_example_rail_network() -> StateNetwork:
@@ -156,6 +157,4 @@ if __name__ == "__main__":
     )
     figure = add_state_network_in_3d_to_figure(network, color_map=color_map)
     figure.show()
-    compose_with_slider(
-        (figure, figure)
-    ).show()
+    compose_with_slider((figure, figure)).show()

@@ -13,7 +13,10 @@ For this purpose, we built a UI prototype that visually represents the essential
 # Results 
 
 <img width="640" alt="Interface 0 31" src="https://github.com/user-attachments/assets/61719a6f-650e-4c18-8868-7bb28ce7cc6f">
+View: Example 1
+
 <img width="640" alt="Interface 0 32" src="https://github.com/user-attachments/assets/00c2708e-2dbd-4abf-bde7-7544e17fc13f">
+View: Example 2
 
 
 # Next steps 

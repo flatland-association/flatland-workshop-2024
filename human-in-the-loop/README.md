@@ -10,6 +10,14 @@ We were particularly concerned with the question of how the information from Fla
 We also thought about how everything could be arranged. On the one hand, the system should make suggestions to the user as possible scenarios and, on the other hand, the user should be able to arrange a single move directly.
 For this purpose, we built a UI prototype that visually represents the essential elements and explains the different views.
 
+# Results 
+
+# Next steps 
+- Implement a simple Flatland Agent (such as e.g. [shortest_path_deadlock_avoidance_policy](https://github.com/aiAdrian/flatland_solver_policy/tree/main/policy/heuristic_policy/shortest_path_deadlock_avoidance_policy), ... )
+- Implement the proposed Design (build a prototyp) - it might can be integrated into an existing framework such as interactiveAI from SystemX
+- Test with Human and find weaks and strongs
+- Adapt the findings
+
 # Source of inspiration
 
 Rousseau, T., Amokrane, K., Meddeb, M., Renoir, N. , Brunat, M. , Fort, M. , Schott, L. , Mahler, S. , Berthou, H. (2024, April) 

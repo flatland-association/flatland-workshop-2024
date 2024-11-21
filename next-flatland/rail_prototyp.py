@@ -77,9 +77,7 @@ class RailNetwork:
                 self.resources[i]
             ]
 
-        self.resources[0].valid_routes[self.resources[1]] = [self.resources[1]]
         self.resources[0].valid_routes[self.resources[0]] = [self.resources[1]]
-        self.resources[5].valid_routes[self.resources[4]] = [self.resources[4]]
         self.resources[5].valid_routes[self.resources[5]] = [self.resources[4]]
 
         # Define valid routes for straight line 6->7
@@ -105,14 +103,29 @@ class RailNetwork:
         self.resources[4].valid_routes[self.resources[3]] = [self.resources[5]]
         self.resources[4].valid_routes[self.resources[7]] = [self.resources[5]]
 
-    def _initialize_relations(self):
+    def create_network(self):
+        system_state_network = SSNetwork().create_empty()
+        nodes_to_add = []
+        links_to_add = []
+
+        start_resource = self.resources[0]
+        end_resource = self.resources[-1]
+
+        while True:
+            next_resource = start_resource.valid_routes.get(start_resource)
         for resource in self.resources:
-            for from_resource, to_resources in resource.valid_routes.items():
-                for to_resource in to_resources:
-                    relation = Relation(
-                        from_entity=from_resource, to_entity=to_resource
-                    )
-                    self.relations.append(relation)
+            resource.valid_routes[]
+            nodes_to_add.append(
+                InfrastructureNode(
+                    coordinates=Coordinates(x=resource.x, y=resource.y),
+                )
+            )
+            for dest in resource.valid_routes.get(resource, []):
+                links_to_add.append(
+                    {"source": resource.id, "target": dest.id, "type": "route"}
+                )
+        
+
 
     def get_resources(self):
         return self.resources
@@ -253,8 +266,8 @@ class RailState(SystemState[Agent, Relation, RailResource]):
             relations_by_entity[relation.to_entity] += 0
         return relations_by_entity
 
-    def add_entity(self, entity: Agent):
-        self.agents.append(entity)
+    def add_agent(self, agent: Agent):
+        self.agents.append(agent)
 
     def add_relation(self, from_entity: Entity, to_entity: Entity):
         self.relations.append(Relation(from_entity, to_entity))

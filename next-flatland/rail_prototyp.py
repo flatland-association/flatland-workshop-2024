@@ -26,6 +26,7 @@ from next_flatland.network.state_network.network import StateNetwork
 from next_flatland.network.state_network.node import StateNode, StateNodeType
 from next_flatland.network.state_network.plot_3d import (
     add_state_network_in_3d_to_figure,
+    compose_with_slider,
 )
 
 
@@ -247,7 +248,7 @@ if __name__ == "__main__":
     rail_state = RailState(state=rail_network)
     rail_state.add_agent_to_network(agents[0], NodeId("0_forward"))
     rail_state.add_agent_to_network(agents[1], NodeId("5_backward"))
-    add_state_network_in_3d_to_figure(rail_state.state).show()
+    figures = [add_state_network_in_3d_to_figure(rail_state.state)]
 
     rail_arbiter = RailArbiter()
     rail_propagator = RailPropagator()
@@ -257,4 +258,5 @@ if __name__ == "__main__":
         propagator=rail_propagator, state=rail_state, arbiter=rail_arbiter
     )
 
-    simulation.run()
+    simulation.run(figures)
+    compose_with_slider(figures).show()

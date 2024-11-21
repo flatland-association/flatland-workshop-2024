@@ -2,6 +2,8 @@ from abc import abstractmethod, ABCMeta
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import Set, Generic, TypeVar, Any, List, Dict
+import plotly.graph_objects as go
+
 
 from next_flatland.network.state_network.network import StateNetwork
 from next_flatland.network.state_network.plot_3d import (
@@ -183,16 +185,16 @@ class GenEnvSimulation:
     def addEffects(self, effects: List[Effect]):
         self.queue.extend(effects)
 
-    def run(self):
+    def run(self, figures: list[go.Figure] | None = None):
         dones = self.step()
-        add_state_network_in_3d_to_figure(self.state.state).show()
-        ...
+        if isinstance(figures, list):
+            figures.append(add_state_network_in_3d_to_figure(self.state.state))
 
         while not (all(dones.values())):
             self.queue.clear()
             dones = self.step()
-            add_state_network_in_3d_to_figure(self.state.state).show()
-            ...
+            if isinstance(figures, list):
+                figures.append(add_state_network_in_3d_to_figure(self.state.state))
 
     def step(self):
         self.addEffects(self.state.actions_to_effects(self.state.pull_actions()))

@@ -70,10 +70,12 @@ class RailNetwork:
         0 1  2 3  4 5
         """
         # Define valid routes for straight line 0->1->2->3->4->5
-        for i in range(1,4):
-            self.resources[i].valid_routes[self.resources[i-1]] = [self.resources[i]]
-            self.resources[i+1].valid_routes[self.resources[i+1]] = [self.resources[i]]
-        
+        for i in range(1, 4):
+            self.resources[i].valid_routes[self.resources[i - 1]] = [self.resources[i]]
+            self.resources[i + 1].valid_routes[self.resources[i + 1]] = [
+                self.resources[i]
+            ]
+
         self.resources[0].valid_routes[self.resources[1]] = [self.resources[1]]
         self.resources[0].valid_routes[self.resources[0]] = [self.resources[1]]
         self.resources[5].valid_routes[self.resources[4]] = [self.resources[4]]
@@ -87,12 +89,18 @@ class RailNetwork:
 
         # Add switch connections
         # At resource 1 (connecting to 6)
-        self.resources[1].valid_routes[self.resources[0]] = [self.resources[2], self.resources[6]]
+        self.resources[1].valid_routes[self.resources[0]] = [
+            self.resources[2],
+            self.resources[6],
+        ]
         self.resources[1].valid_routes[self.resources[2]] = [self.resources[0]]
         self.resources[1].valid_routes[self.resources[6]] = [self.resources[0]]
 
         # At resource 4 (connecting to 7)
-        self.resources[4].valid_routes[self.resources[5]] = [self.resources[3], self.resources[7]]
+        self.resources[4].valid_routes[self.resources[5]] = [
+            self.resources[3],
+            self.resources[7],
+        ]
         self.resources[4].valid_routes[self.resources[3]] = [self.resources[5]]
         self.resources[4].valid_routes[self.resources[7]] = [self.resources[5]]
 
@@ -215,12 +223,11 @@ class RailState(SystemState[Agent, Relation, RailResource]):
                     effects.append(action)
         return effects
 
-    def relations_by_entity(self) -> Dict[Any, int]:
-        """Count relations per entity"""
-        counts = defaultdict(int)
+    def relations_by_entity(self):
+        relations_by_entity = defaultdict(list)
         for relation in self.relations:
-            counts[relation.to_entity] += 0
-        return counts
+            relations_by_entity[relation.from_entity].append(relation)
+        return
 
     def add_entity(self, entity: Agent):
         self.agents.append(entity)
@@ -247,13 +254,14 @@ class RailArbiter(Arbiter):
                 resource_to_add = effect.add_relation.to_entity
                 resource_to_remove = effect.remove_relation.to_entity
 
-                # occupation check
-                valid_occupation = (
-                    self.rail_state.relations_by_entity()[resource_to_add] == 0
-                )
-                if not valid_occupation:
-                    print("agent {} stopped at occupied resource".format(agent.id))
-                    continue
+                for entity in self.rail_state.relations_by_entity()[resource_to_add]:
+                    if isinstance(entity, TrainAgent):
+                        print(
+                            "conflict with between agents {} and {}".format(
+                                agent.id, entity.id
+                            )
+                        )
+                        continue
 
                 # transition check
                 valid_transition = (
@@ -267,7 +275,11 @@ class RailArbiter(Arbiter):
                             RemoveRelation(effect.remove_relation),
                         ]
                     )
-                print("agent {} stopped at invalid transition {} -> {}".format(agent.id, agent.previous_position.id,agent.current_position.id))
+                print(
+                    "agent {} stopped at invalid transition {} -> {}".format(
+                        agent.id, agent.previous_position.id, agent.current_position.id
+                    )
+                )
 
         return valid_effects
 
@@ -317,8 +329,9 @@ if __name__ == "__main__":
             id=i,
             current_position=initial_position[i],
             previous_position=initial_position[i],
-            policy=RandomPolicy()
-        ) for i in range(2)
+            policy=RandomPolicy(),
+        )
+        for i in range(2)
     ]
 
     # Setup simulation components

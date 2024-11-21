@@ -197,12 +197,6 @@ class SystemState(Generic[AgentType, RelationType, ResourceType]):
     def pull_actions(self):
         raise NotImplementedError()
 
-    def relations_by_entity(self):
-        relations_by_entity = defaultdict(list)
-        for relation in self.relations:
-            relations_by_entity[relation.from_entity].append(relation)
-        return relations_by_entity
-
 
 class GenEnvSimulation:
 

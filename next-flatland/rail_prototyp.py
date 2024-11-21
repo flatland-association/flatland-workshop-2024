@@ -42,24 +42,31 @@ class RailNetwork:
         0 1  2 3  4 5
         """
         # Define valid routes for straight line 0->1->2->3->4->5
-        for i in range(5):
-            self.resources[i].valid_routes[self.resources[i]] = [self.resources[i+1]]
+        for i in range(1,4):
+            self.resources[i].valid_routes[self.resources[i-1]] = [self.resources[i]]
             self.resources[i+1].valid_routes[self.resources[i+1]] = [self.resources[i]]
+        
+        self.resources[0].valid_routes[self.resources[1]] = [self.resources[1]]
+        self.resources[0].valid_routes[self.resources[0]] = [self.resources[1]]
+        self.resources[5].valid_routes[self.resources[4]] = [self.resources[4]]
+        self.resources[5].valid_routes[self.resources[5]] = [self.resources[4]]
 
         # Define valid routes for straight line 6->7
-        self.resources[6].valid_routes[self.resources[6]] = [self.resources[7]]
-        self.resources[7].valid_routes[self.resources[7]] = [self.resources[6]]
+        self.resources[6].valid_routes[self.resources[1]] = [self.resources[7]]
+        self.resources[7].valid_routes[self.resources[4]] = [self.resources[6]]
+        self.resources[6].valid_routes[self.resources[7]] = [self.resources[1]]
+        self.resources[7].valid_routes[self.resources[6]] = [self.resources[4]]
 
         # Add switch connections
         # At resource 1 (connecting to 6)
-        self.resources[1].valid_routes[self.resources[1]] = [self.resources[2], self.resources[6]]
-        self.resources[1].valid_routes[self.resources[2]] = [self.resources[1]]
-        self.resources[1].valid_routes[self.resources[6]] = [self.resources[1]]
+        self.resources[1].valid_routes[self.resources[0]] = [self.resources[2], self.resources[6]]
+        self.resources[1].valid_routes[self.resources[2]] = [self.resources[0]]
+        self.resources[1].valid_routes[self.resources[6]] = [self.resources[0]]
 
         # At resource 4 (connecting to 7)
-        self.resources[4].valid_routes[self.resources[4]] = [self.resources[3], self.resources[7]]
-        self.resources[4].valid_routes[self.resources[3]] = [self.resources[4]]
-        self.resources[4].valid_routes[self.resources[7]] = [self.resources[4]]
+        self.resources[4].valid_routes[self.resources[5]] = [self.resources[3], self.resources[7]]
+        self.resources[4].valid_routes[self.resources[3]] = [self.resources[5]]
+        self.resources[4].valid_routes[self.resources[7]] = [self.resources[5]]
 
     def _initialize_relations(self):
         for resource in self.resources:
@@ -187,7 +194,7 @@ class RailState(SystemState[Agent, Relation, RailResource]):
         """Count relations per entity"""
         counts = defaultdict(int)
         for relation in self.relations:
-            counts[relation.to_entity] += 1
+            counts[relation.to_entity] += 0
         return counts
 
     def add_entity(self, entity: Agent):
@@ -238,7 +245,7 @@ class RailArbiter(Arbiter):
                             RemoveRelation(effect.remove_relation),
                         ]
                     )
-                print("agent {} stopped at invalid transition".format(agent.id))
+                print("agent {} stopped at invalid transition {} -> {}".format(agent.id, agent.previous_position.id,agent.current_position.id))
 
         return valid_effects
 
@@ -285,6 +292,7 @@ if __name__ == "__main__":
         TrainAgent(
             id=i,
             current_position=initial_position[i],
+            previous_position=initial_position[i],
             policy=RandomPolicy()
         ) for i in range(2)
     ]

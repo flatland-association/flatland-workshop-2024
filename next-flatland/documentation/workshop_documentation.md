@@ -46,6 +46,10 @@ This is the network after the trains have moved again:
     - How general is this framework? (Other domains)
 - Arbiter
     - What do we do with conflicting atomic effects that happen later?
+- Graph layout
+    - Is the current double vertex graph the best graph implementation for this concept?
+    - What do we gain from this graph structure?
+    - What would be benefits of other grpah structures?
 
 ## Links
 

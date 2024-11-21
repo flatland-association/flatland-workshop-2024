@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from enum import IntEnum, unique
 from typing import NewType
 
-from next_flatland.network.abc import NodeId
+from next_flatland.network.abc.node import NodeId
 
 EndNodeIdPair = NewType("EndNodeIdPair", tuple[NodeId, NodeId])
 

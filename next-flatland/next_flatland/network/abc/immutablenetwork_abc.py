@@ -5,15 +5,26 @@ from abc import ABC
 from collections.abc import Iterable
 from dataclasses import asdict, dataclass, is_dataclass
 from types import UnionType
-from typing import (Any, Generic, Iterator, Literal, NewType, Type, TypeVar,
-                    Union, get_args, get_origin, get_type_hints)
+from typing import (
+    Any,
+    Generic,
+    Iterator,
+    Literal,
+    NewType,
+    Type,
+    TypeVar,
+    Union,
+    get_args,
+    get_origin,
+    get_type_hints,
+)
 
 import igraph
 
-from next_flatland.network.abc import LinkABC, NodeABC
+from next_flatland.network.abc.link import LinkABC
 from next_flatland.network.abc.debug import debug_plot
 from next_flatland.network.abc.link import BaseLinkType, EndNodeIdPair
-from next_flatland.network.abc.node import BaseNodeType, NodeId, NodeIndex
+from next_flatland.network.abc.node import BaseNodeType, NodeABC, NodeId, NodeIndex
 
 NodeT = TypeVar("NodeT", bound=NodeABC)
 LinkT = TypeVar("LinkT", bound=LinkABC)

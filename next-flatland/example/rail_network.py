@@ -1,13 +1,17 @@
 from next_flatland.network.abc.link import EndNodeIdPair
 from next_flatland.network.abc.node import NodeId, ThreeDCoordinates
-from next_flatland.network.state_network.link import StateLink, StateLinkType
-from next_flatland.network.state_network.network import StateNetwork
-from next_flatland.network.state_network.node import StateNode, StateNodeType
+from next_flatland.network.state_network import StateLink, StateLinkType
+from next_flatland.network.state_network import StateNetwork
+from next_flatland.network.state_network import StateNode, StateNodeType
+from next_flatland.network.state_network.plot_3d import (
+    add_state_network_in_3d_to_figure,
+)
 
-RESOURCE_Z = -100
+RESOURCE_Z = -50
 NODE_DISTANCE = 100
 TRACK_LOW_Y = 0
 TRACK_HIGH_Y = 50
+BACKWARD_OFFSET = 10
 
 
 def create_example_rail_network() -> StateNetwork:
@@ -22,7 +26,7 @@ def create_example_rail_network() -> StateNetwork:
     nodes_to_add: list[StateNode] = []
     links_to_add: list[tuple[EndNodeIdPair, StateLink]] = []
 
-    resources = [(str(i), (i * NODE_DISTANCE, TRACK_LOW_Y)) for i in range(5)]
+    resources = [(str(i), (i * NODE_DISTANCE, TRACK_LOW_Y)) for i in range(6)]
     resources.extend(
         [(str(i), ((i - 4) * NODE_DISTANCE, TRACK_HIGH_Y)) for i in range(6, 8)]
     )
@@ -42,7 +46,7 @@ def create_example_rail_network() -> StateNetwork:
         nodes_to_add.append(
             StateNode(
                 id=backward_node_id,
-                coordinates=ThreeDCoordinates(x=x, y=y, z=0),
+                coordinates=ThreeDCoordinates(x=x, y=y + BACKWARD_OFFSET, z=0),
                 node_type=StateNodeType.INFRASTRUCTURE,
             )
         )
@@ -141,4 +145,4 @@ def create_example_rail_network() -> StateNetwork:
 
 if __name__ == "__main__":
     network = create_example_rail_network()
-    network.debug_plot()
+    add_state_network_in_3d_to_figure(network).show()

@@ -9,6 +9,8 @@ readme = "README.md"
 python = "^3.10"
 plotly = "^5.24.1"
 igraph = "^0.11.8"
+pandas = "^2.2.3"
+pycairo = "1.21.0"
 
 
 [build-system]

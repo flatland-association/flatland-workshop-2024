@@ -1,3 +1,8 @@
+
+---> https://docs.google.com/document/d/1xOMsAFNeggxFOYqyUsa1zkiW1IXfZKloFmqQto52hBE/edit?tab=t.0
+
+
+
 # Next Graph-Based Observation
 
 ## Objectives
@@ -26,7 +31,7 @@ Missing/padding nodes are filled in with -inf (truncated).
 Missing values in present node are filled in with +inf (truncated).
 ```
 
-|                                         |                                                                                                                                                                                                            | Comments ChE                                                                                                                                                                                                                                                                                    |
+| feature                                 | description                                                                                                                                                                                                | Comments / discussion                                                                                                                                                                                                                                                                           |
 |-----------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | dist_own_target_encountered             | if own target lies on the explored branch the current distance from the original agent in number of cells is stored.                                                                                       |                                                                                                                                                                                                                                                                                                 |
 | dist_other_target_encountered           | if another agents target is detected the distance in number of cells from the agents current location is stored                                                                                            |                                                                                                                                                                                                                                                                                                 |
@@ -62,6 +67,8 @@ Alberto reaches branch-depth max 3 to stay within submission limit. Corresponds 
 
 For Alberto's MCTS, TreeObs is the bigger bottleneck than serialization/de-serialization of intermediate states.
 
+:warning: However, from a AI4RealNet Project Perspective, serialization/de-serialization has highest priority.
+
 ## Ideation of additional features
 
 * n-shortest: weighted
@@ -81,9 +88,10 @@ For Alberto's MCTS, TreeObs is the bigger bottleneck than serialization/de-seria
 
 ## Tangible Outcomes
 
-* [Description (issue) of](https://github.com/flatland-association/flatland-rl/issues/89)
+* [Description (issue)](https://github.com/flatland-association/flatland-rl/issues/89)
   and [draft pr](https://github.com/flatland-association/flatland-rl/pull/90) of implementation in Flatland 3
 * [Description (issue) of episodes for performance benchmarking](https://github.com/flatland-association/flatland-rl/issues/92)
 * Take up Flatland dev coffee group (2 weekly) again
     * Slack for instant messaging
     * GitHub discussions 
+

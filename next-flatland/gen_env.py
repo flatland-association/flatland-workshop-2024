@@ -1,14 +1,11 @@
-from abc import abstractmethod, ABCMeta
-from collections import defaultdict
+from abc import ABCMeta, abstractmethod
 from dataclasses import dataclass
-from typing import Set, Generic, TypeVar, Any, List, Dict
+from typing import Any, Generic, List, Set, TypeVar
+
 import plotly.graph_objects as go
 
-
 from next_flatland.network.state_network.network import StateNetwork
-from next_flatland.network.state_network.plot_3d import (
-    add_state_network_in_3d_to_figure,
-)
+from next_flatland.network.state_network.plot_3d import add_state_network_in_3d_to_figure
 
 
 # TODO type hints and generics domain-agnostic

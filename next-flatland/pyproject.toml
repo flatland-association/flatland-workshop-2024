@@ -7,11 +7,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-plotly = "^5.24.1"
-igraph = "^0.11.8"
 pandas = "^2.2.3"
-pycairo = "1.21.0"
-
+ugraph = { version = "^0.0.421", extras = ["plotting"] }
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.10.0"

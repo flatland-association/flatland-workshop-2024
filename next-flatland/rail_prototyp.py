@@ -1,33 +1,17 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from collections import defaultdict
 import random
-from typing import Dict, List, Set, Any, TypeVar
-from example.rail_network import AGENT_Z, create_example_rail_network
-from gen_env import (
-    Agent,
-    Arbiter,
-    Effect,
-    Agent,
-    Entity,
-    GenEnvSimulation,
-    Relation,
-    Resource,
-    SystemState,
-    Propagator,
-)
+from dataclasses import dataclass
+from typing import Dict, List
 
-from next_flatland.network.abc.immutablenetwork_abc import LinkIndex
-from next_flatland.network.abc.link import EndNodeIdPair
-from next_flatland.network.abc.node import NodeId, ThreeDCoordinates
+from ugraph import EndNodeIdPair, LinkIndex, NodeId, ThreeDCoordinates
+
+from example.rail_network import AGENT_Z, create_example_rail_network
+from gen_env import Agent, Arbiter, Effect, GenEnvSimulation, Propagator, SystemState
 from next_flatland.network.state_network.link import StateLink, StateLinkType
 from next_flatland.network.state_network.network import StateNetwork
 from next_flatland.network.state_network.node import StateNode, StateNodeType
-from next_flatland.network.state_network.plot_3d import (
-    add_state_network_in_3d_to_figure,
-    compose_with_slider,
-)
+from next_flatland.network.state_network.plot_3d import add_state_network_in_3d_to_figure, compose_with_slider
 
 
 @dataclass()
@@ -68,9 +52,7 @@ class RemoveEdge(Effect):
 
 @dataclass
 class RandomPolicy:
-    def propose_next_position(
-        self, agent_id: NodeId, state: StateNetwork
-    ) -> StateNode | None:
+    def propose_next_position(self, agent_id: NodeId, state: StateNetwork) -> StateNode | None:
         # this only works if the agent doesn't have any reservations (a single occupation)
         current_position = state.neighbors(agent_id, "out")[0]
         possible_next_positions = state.neighbors(current_position.id, "out")
@@ -114,9 +96,7 @@ class RailArbiter(Arbiter):
                 agent_id, next_infra_id = effect.edge_to_add
 
                 # is transition valid
-                valid_transition = next_infra_id in [
-                    node.id for node in state.neighbors(curr_infra_id, "out")
-                ]
+                valid_transition = next_infra_id in [node.id for node in state.neighbors(curr_infra_id, "out")]
                 if not valid_transition:
                     print(f"Invalid transition from {curr_infra_id} to {next_infra_id}")
                     continue
@@ -157,9 +137,7 @@ class RailArbiter(Arbiter):
 
 @dataclass
 class RailPropagator(Propagator):
-    def propagate(
-        self, state: StateNetwork, effects: List[Effect]
-    ) -> Dict[Agent, bool]:
+    def propagate(self, state: StateNetwork, effects: List[Effect]) -> Dict[Agent, bool]:
         """
         Propagates effects by:
         - Validating effect types
@@ -173,13 +151,9 @@ class RailPropagator(Propagator):
 
         for effect in effects:
             if isinstance(effect, AddEdge):
-                links_to_add.append(
-                    (effect.edge, StateLink(link_type=StateLinkType.OCCUPATION))
-                )
+                links_to_add.append((effect.edge, StateLink(link_type=StateLinkType.OCCUPATION)))
             if isinstance(effect, RemoveEdge):
-                links_to_remove.append(
-                    state.link_index_by_end_node_id_pair(effect.edge)
-                )
+                links_to_remove.append(state.link_index_by_end_node_id_pair(effect.edge))
             dones["agent"] = False
 
         state.delete_links(links_to_remove)
@@ -254,9 +228,7 @@ if __name__ == "__main__":
     rail_propagator = RailPropagator()
 
     # Create and run simulation
-    simulation = GenEnvSimulation(
-        propagator=rail_propagator, state=rail_state, arbiter=rail_arbiter
-    )
+    simulation = GenEnvSimulation(propagator=rail_propagator, state=rail_state, arbiter=rail_arbiter)
 
     simulation.run(figures)
     compose_with_slider(figures).show()

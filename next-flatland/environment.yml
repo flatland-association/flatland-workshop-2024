@@ -4,5 +4,5 @@ channels:
 dependencies:
   - python=3.10.14
   - pip:
-    - flatland-rl==4.0.3
-    - numpy<2
+      - flatland-rl==4.0.3
+      - numpy<2

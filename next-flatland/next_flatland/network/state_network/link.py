@@ -1,7 +1,6 @@
 from enum import unique
 
-from next_flatland.network.abc import LinkABC
-from next_flatland.network.abc.link import BaseLinkType
+from ugraph import BaseLinkType, LinkABC
 
 
 @unique

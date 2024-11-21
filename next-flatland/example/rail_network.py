@@ -1,13 +1,7 @@
-from next_flatland.network.abc.link import EndNodeIdPair
-from next_flatland.network.abc.node import NodeId, ThreeDCoordinates
-from next_flatland.network.state_network import StateLink, StateLinkType
-from next_flatland.network.state_network import StateNetwork
-from next_flatland.network.state_network import StateNode, StateNodeType
-from next_flatland.network.state_network.plot_3d import (
-    add_state_network_in_3d_to_figure,
-    compose_with_slider,
-)
-from next_flatland.plot import ColorMap
+from ugraph import EndNodeIdPair, NodeId, ThreeDCoordinates
+
+from next_flatland.network.state_network import StateLink, StateLinkType, StateNetwork, StateNode, StateNodeType
+from next_flatland.network.state_network.plot_3d import add_state_network_in_3d_to_figure, compose_with_slider
 
 RESOURCE_Z = -50
 NODE_DISTANCE = 20
@@ -21,7 +15,7 @@ def create_example_rail_network() -> StateNetwork:
     """
          6 7
          - - 
-       /     \ 
+       /     \\
     - -  - -  - -
     0 1  2 3  4 5
     """
@@ -30,9 +24,7 @@ def create_example_rail_network() -> StateNetwork:
     links_to_add: list[tuple[EndNodeIdPair, StateLink]] = []
 
     resources = [(str(i), (i * NODE_DISTANCE, TRACK_LOW_Y)) for i in range(6)]
-    resources.extend(
-        [(str(i), ((i - 4) * NODE_DISTANCE, TRACK_HIGH_Y)) for i in range(6, 8)]
-    )
+    resources.extend([(str(i), ((i - 4) * NODE_DISTANCE, TRACK_HIGH_Y)) for i in range(6, 8)])
 
     for resource_index, (x, y) in resources:
         forward_node_id = NodeId(resource_index + "_forward")
@@ -147,16 +139,6 @@ def create_example_rail_network() -> StateNetwork:
 
 
 if __name__ == "__main__":
-    network = create_example_rail_network()
-    color_map = ColorMap(
-        {
-            StateNodeType.RESOURCE.name: "green",
-            StateNodeType.INFRASTRUCTURE.name: "blue",
-            StateLinkType.ALLOCATION.name: "green",
-            StateLinkType.TRANSITION.name: "blue",
-            StateLinkType.OCCUPATION.name: "purple",
-        }
-    )
-    figure = add_state_network_in_3d_to_figure(network, color_map=color_map)
+    figure = add_state_network_in_3d_to_figure(create_example_rail_network())
     figure.show()
     compose_with_slider((figure, figure)).show()

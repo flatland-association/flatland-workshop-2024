@@ -1,12 +1,7 @@
+from ugraph import EndNodeIdPair, NodeId, ThreeDCoordinates
+
 from example.rail_network import RESOURCE_Z, create_example_rail_network
-from next_flatland.network.abc.link import EndNodeIdPair
-from next_flatland.network.abc.node import NodeId
-from next_flatland.network.abc.node import ThreeDCoordinates
-from next_flatland.network.state_network import (
-    StateLink,
-    StateLinkType,
-    add_state_network_in_3d_to_figure,
-)
+from next_flatland.network.state_network import StateLink, StateLinkType, add_state_network_in_3d_to_figure
 from next_flatland.network.state_network.network import StateNetwork
 from next_flatland.network.state_network.node import StateNode, StateNodeType
 from next_flatland.network.state_network.plot_3d import compose_with_slider
@@ -33,9 +28,7 @@ BACKWARD_6 = NodeId("6_backward")
 BACKWARD_7 = NodeId("7_backward")
 
 
-def mock_state(
-    occupations: dict[NodeId, NodeId], reservations: dict[NodeId, NodeId]
-) -> StateNetwork:
+def mock_state(occupations: dict[NodeId, NodeId], reservations: dict[NodeId, NodeId]) -> StateNetwork:
     agent_1 = StateNode(
         id=AGENT_ID_1,
         coordinates=ThreeDCoordinates(x=0, y=25, z=-RESOURCE_Z),
@@ -49,18 +42,18 @@ def mock_state(
 
     links_to_add = []
 
-    for agent, ressource in occupations.items():
+    for agent, resource in occupations.items():
         links_to_add.append(
             (
-                EndNodeIdPair((agent, ressource)),
+                EndNodeIdPair((agent, resource)),
                 StateLink(link_type=StateLinkType.OCCUPATION),
             )
         )
 
-    for agent, ressource in reservations.items():
+    for agent, resource in reservations.items():
         links_to_add.append(
             (
-                EndNodeIdPair((agent, ressource)),
+                EndNodeIdPair((agent, resource)),
                 StateLink(link_type=StateLinkType.RESERVATION),
             )
         )

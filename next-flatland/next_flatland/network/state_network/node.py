@@ -1,7 +1,6 @@
 from enum import unique
 
-from next_flatland.network.abc import NodeABC
-from next_flatland.network.abc.node import BaseNodeType, NodeId, ThreeDCoordinates
+from ugraph import BaseNodeType, NodeABC, NodeId, ThreeDCoordinates
 
 
 @unique

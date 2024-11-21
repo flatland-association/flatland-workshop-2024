@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from typing import Dict, List, Generic, TypeVar
+from typing import Dict, List, TypeVar
+
 from gen_env import Relation
 
 EntityType = TypeVar("EntityType")
@@ -28,9 +29,7 @@ class RailNetwork:
         # Define valid routes for straight line 0->1->2->3->4->5
         for i in range(5):
             self.resources[i].valid_routes[self.resources[i]] = [self.resources[i + 1]]
-            self.resources[i + 1].valid_routes[self.resources[i + 1]] = [
-                self.resources[i]
-            ]
+            self.resources[i + 1].valid_routes[self.resources[i + 1]] = [self.resources[i]]
 
         # Define valid routes for straight line 6->7
         self.resources[6].valid_routes[self.resources[6]] = [self.resources[7]]
@@ -57,9 +56,7 @@ class RailNetwork:
         for resource in self.resources:
             for from_resource, to_resources in resource.valid_routes.items():
                 for to_resource in to_resources:
-                    relation = Relation(
-                        from_entity=from_resource, to_entity=to_resource
-                    )
+                    relation = Relation(from_entity=from_resource, to_entity=to_resource)
                     self.relations.append(relation)
 
     def get_resources(self):

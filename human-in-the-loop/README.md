@@ -12,6 +12,10 @@ For this purpose, we built a UI prototype that visually represents the essential
 
 # Results 
 
+<img width="640" alt="Interface 0 31" src="https://github.com/user-attachments/assets/61719a6f-650e-4c18-8868-7bb28ce7cc6f">
+<img width="640" alt="Interface 0 32" src="https://github.com/user-attachments/assets/00c2708e-2dbd-4abf-bde7-7544e17fc13f">
+
+
 # Next steps 
 - Implement a simple Flatland Agent (such as e.g. [shortest_path_deadlock_avoidance_policy](https://github.com/aiAdrian/flatland_solver_policy/tree/main/policy/heuristic_policy/shortest_path_deadlock_avoidance_policy), ... ) and build the break through
 - Enhance the AI ​​or introduce real AI (OR, ..., [MAPF](https://mapf.info/index.php/Main/News), ... MARL)

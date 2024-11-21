@@ -3,6 +3,7 @@
 # Problem
 The ideas of this work are to be verified through a functional software. The focus is not necessarily on the quality of disposition, nor on the accurate representation of a real railway operation or a railway operation simulation, but rather on the question of how a user interface and a user interaction model between railway (simulation) with AI (disposition algorithmics from the field of OR, heuristics, Multi-Agent Path Finding (MAPF), or Multi-Agent Reinforcement Learning (MARL)) and human interactions can be implemented.
 
+## Prerequisites
 To prototypically implement the ideas found in the field of user interaction, user interface, and human-machine interaction, some basic prerequisites must be met:
 
 - A simulation environment exists that allows disposition decisions (actions) to be made and which are then applied or implemented by the system, and the temporal course (including the impact of the actions) can be simulated through simulation.
@@ -10,10 +11,32 @@ To prototypically implement the ideas found in the field of user interaction, us
 - A disposition method exists that can be controlled by optimization goals, which are currently of importance, e.g., minimizing train delays.
 - A disposition method exists that can be interactively controlled by settings, determining which actions can be taken, including changing routes, stopping vehicles (agents waiting, etc.).
 
+## Assumptions
 Assuming that Simulationsoftware (Flatland) exists with an AI-supported planning agent, we began laying the foundation for the question of how we can make Flatland data more accessible to humans and how humans can communicate with the AI-supported planning agent so that it knows the optimization goals or how humans can influence the behavior of the AI agents through proactive or reactive control.
 
-The interaction should be possible globally or at the agent level. This means that, on the one hand, we want to communicate the global goals to the system or dynamically adjust them, but also give each agent a strategy that differs from the global one. This means that different goals can be pursued at different levels or, depending on the importance of a train, which goals or priorities should be pursued for a specific train.
+## Goals
 
+- **User should be able to control the dispatching goals globally (for all agents) or locally for one single agent (override global setting).**
+  The interaction should be possible globally or at the agent level. This means that, on the one hand, we want to communicate the global goals to the system or dynamically adjust them, but also give each agent a strategy 
+  that differs from the global one. This means that different goals can be pursued at different levels or, depending on the importance of a train, which goals or priorities should be pursued for a specific train.
+
+- **User should be able to select one single agent and choose dispatching action for this single train separately.**
+
+- **User should be able to pre-simulate computer generated (AI generated) scenarios.**
+  The user can choose one scenario (suggestion) which contains at least one dispatching action up to many, which will be done in a given order and at a clearly defined time from now to the near future.
+  The user should be able to override an action in the scenario, thus the user should see the actions in a temporally ordered list where each action will be very clearly visualized and defined.
+
+- **The system should have the option to switch from full information visualisation and automatically filtered information where only relevant information is visualized (displayed).**
+  This means that when the system runs in full information visualization mode, the user gets maximum details displayed. When the system runs in automatic filtering mode, the visualization/displaying of the information is 
+  selective, and the system will only show what is relevant to the current ongoing decision (support).
+
+- **The system should be able to notify the user when some unexpected events occurs.**
+
+- **The system should have the option to switch automatic dispatching on. When enabled, no user-defined action can be taken. The user can only control the dispatching result through the goals.**
+- **The system should have the option to switch off the dispatching suggestions and/or the notification panel**
+  
+
+## What we did
 We particularly dealt with the question of how the information from Flatland can be made accessible to humans so that users can quickly and easily get an overview. Additionally, we tried to create a version in the first draft that reduces the cognitive load on humans. We were also inspired by the idea of hypervision.
 
 We also thought about how everything could be arranged in the frontend (user interface). On the one hand, the system should present possible scenarios as suggestions to the user, and on the other hand, the user should be able to communicate the goals to the system (globally or locally, i.e., it must also be possible to influence or control the optimization goals for a very specific, individual train directly or indirectly).

@@ -13,7 +13,8 @@ For this purpose, we built a UI prototype that visually represents the essential
 # Results 
 
 # Next steps 
-- Implement a simple Flatland Agent (such as e.g. [shortest_path_deadlock_avoidance_policy](https://github.com/aiAdrian/flatland_solver_policy/tree/main/policy/heuristic_policy/shortest_path_deadlock_avoidance_policy), ... )
+- Implement a simple Flatland Agent (such as e.g. [shortest_path_deadlock_avoidance_policy](https://github.com/aiAdrian/flatland_solver_policy/tree/main/policy/heuristic_policy/shortest_path_deadlock_avoidance_policy), ... ) and build the break through
+- Enhance the AI ​​or introduce real AI (OR, ..., [MAPF](https://mapf.info/index.php/Main/News), ... MARL)
 - Implement the proposed Design (build a prototyp) - it might can be integrated into an existing framework such as interactiveAI from SystemX
 - Test with Human and find weaks and strongs
 - Adapt the findings

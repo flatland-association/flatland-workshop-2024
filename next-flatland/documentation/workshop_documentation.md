@@ -39,13 +39,13 @@ This is the network after the trains have moved again:
 
 ## Open Questions
 - Existing literature and libraries
- - What exists and can be reused?
+   - What exists and can be reused?
 - Performance
- - What do we gain with this new representation?
+   - What do we gain with this new representation?
 - Generality
- - How general is this framework? (Other domains)
+   - How general is this framework? (Other domains)
 - Arbiter
- - What do we do with conflicting atomic effects that happen later?
+   - What do we do with conflicting atomic effects that happen later?
 
 ## Links
 

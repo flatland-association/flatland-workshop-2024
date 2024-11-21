@@ -31,6 +31,8 @@ Assuming that Simulationsoftware (Flatland) exists with an AI-supported planning
   selective, and the system will only show what is relevant to the current ongoing decision (support).
 
 - **The system should be able to notify the user when some unexpected events occurs.**
+- **The system should have a map like flatland rendering/visualisation which is realted to the "Strecken-Spiegel"**
+- **The system should have time-distance-visualisation. User should be able to select a certain "Path/route"**
 
 - **The system should have the option to switch automatic dispatching on. When enabled, no user-defined action can be taken. The user can only control the dispatching result through the goals.**
 - **The system should have the option to switch off the dispatching suggestions and/or the notification panel**

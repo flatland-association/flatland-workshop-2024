@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 class RailResource(Resource):
     id: int
     valid_routes: dict[Resource, list[Resource]]
+    x: int
+    y: int
 
     def __hash__(self):
         return hash(self.id)
@@ -19,7 +21,11 @@ class RailResource(Resource):
 
 class RailNetwork:
     def __init__(self):
-        self.resources = [RailResource(id=i, valid_routes={}) for i in range(8)]
+        self.coordinates = [
+            (0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0),
+            (2, 1), (3, 1)
+        ]
+        self.resources = [RailResource(id=i, valid_routes={}, x=coord[0], y=coord[1]) for i, coord in enumerate(self.coordinates)]
         self.relations = []
         self._initialize_routes()
         self._initialize_relations()
@@ -67,11 +73,13 @@ class RailNetwork:
     
     def plot_network(self):
         G = nx.DiGraph()
-        for relation in self.relations:
-            G.add_edge(relation.from_entity.id, relation.to_entity.id)
-
-        pos = nx.spring_layout(G)
-        nx.draw(G, pos, with_labels=True, node_size=700, node_color="skyblue", font_size=10, font_weight="bold", arrows=True)
+        for resource in self.resources:
+            G.add_node(resource.id, pos=(resource.x, resource.y))
+            for dest in resource.valid_routes.get(resource, []):
+                G.add_edge(resource.id, dest.id)
+        
+        pos = nx.get_node_attributes(G, 'pos')
+        nx.draw(G, pos, with_labels=True, node_size=700, node_color='skyblue', font_size=10, font_weight='bold')
         plt.show()
     
 

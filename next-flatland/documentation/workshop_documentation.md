@@ -23,6 +23,10 @@ Worked on a simple prototype to test the concept in code.
 ## Open Questions
 - Existing literature and libraries
  - What exists and can be reused?
+- Performance
+ - What do we gain with this new representation?
+- Generality
+ - How general is this framework? (Other domains)
 - Arbiter
  - What do we do with conflicting atomic effects that happen later?
 

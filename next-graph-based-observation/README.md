@@ -1,8 +1,3 @@
-
----> https://docs.google.com/document/d/1xOMsAFNeggxFOYqyUsa1zkiW1IXfZKloFmqQto52hBE/edit?tab=t.0
-
-
-
 # Next Graph-Based Observation
 
 ## Objectives
@@ -93,5 +88,74 @@ For Alberto's MCTS, TreeObs is the bigger bottleneck than serialization/de-seria
 * [Description (issue) of episodes for performance benchmarking](https://github.com/flatland-association/flatland-rl/issues/92)
 * Take up Flatland dev coffee group (2 weekly) again
     * Slack for instant messaging
-    * GitHub discussions 
+    * GitHub discussions
 
+# Wrap-Up: Enhancements to Tree Observation (maybe to Graph/will support graph)
+
+## Members of discussion:
+
+* Christian Eichenberger (flatland, prev SBB)
+* Alberto (EnliteAI)
+* Farhad (DB)
+* Jeremy (flatland)
+
+## Motivations:
+
+* Tree observation is slow and memory intensive (and so cannot provide sufficient depth)
+* Provide an easily usable enhancement for the next Flatland iteration
+    * Address concerns expressed by previous participants / researchers.
+    * Improve performance but preserve ability to enhance / change
+
+## Desirable Features from
+
+* Improve features for potential future conflicts (mazerl Albreto obs)
+* TreeLSTM observation
+    * “Pruned” or shaped tree permits greater depth
+    * C implementation improves performance but raises the barrier to reviews and modifications
+
+This will work as a baseline to then extract high-level features to shape an observation.
+Want to incorporate more multi-agent / comms features? Eg some form of “global” observation?
+
+## Graph based Observation vs Graph Environment
+
+The grid-based core of flatland is being increasingly seen as a technical burden. It was adopted historically because of the existing literature and examples
+available. It is now a limitation.
+However it will be somewhat radical to discard and replace the existing grid env.
+
+We consider the interim step of a graph observation / translation built on the existing grid env:
+Compute cost of translation
+Burden of maintaining two views
+
+Vs
+
+Replace the various FL components with graph-based equivalents:
+
+* Env generation
+* Stepping engine
+* Observations
+* Persistence
+
+## What can we do today to make a difference?
+
+Very often agents follow their “predicted path” → recycle previous computation and update only the out-of-date information.
+Currently the tree-observation has a depth specified in #cells. Graph-wise would be better to specify the depth of view as traversed edges.
+
+How do we evaluate the cost of conversion?
+
+We collect trajectories with several trains and different map sizes and then replay while enabling different observations. We can then benchmark the impact of
+our proposal.
+
+## EnhanceTreeObsForRailEnv Objectives
+
+Control exploration by number of branches and not by number of cells to explore.
+Speed-up TreeObs: efficient data structure for "overlay" graph of decision points (for tree branches)
+Visualization of current state of overlay graph
+Add new features to TreeObsForRailEnv (currently 12)
+It should be easy to add new features
+
+## Miscellaneous Considerations
+
+Tree does not recombine. A graph obs based on the rail topology would recombine; but different agent paths may alight on a no
+Flatland competition used constrained compute (4 cores for ~10 mins?)  
+Monte-Carlo Tree Search (MCTS) requires “rewinding” of episodes back to “checkpoints”. We could build more support for this in the env. We already record
+episode steps, and index into the PseudoRandom sequence. This could improve the performance of MCTS approaches by reducing the burden of env persistence.

@@ -1,7 +1,7 @@
 # Human in the Loop and Flatland
 
 # Problem
-The ideas of this work are to be verified through a functional software. The focus is not necessarily on the quality of disposition, nor on the accurate representation of a real railway operation or a railway operation simulation, but rather on the question of how a user interface and a user interaction model between railway (simulation) with AI (disposition algorithmics from the field of OR, heuristics, Multi-Agent Path Finding (MAPF), or Multi-Agent Reinforcement Learning (MARL)) and human interactions can be implemented.
+TODO
 
 ## Prerequisites
 To prototypically implement the ideas found in the field of user interaction, user interface, and human-machine interaction, some basic prerequisites must be met:
@@ -55,6 +55,11 @@ For this purpose, we created a UI prototype that visually represents the essenti
 
 
 # Next steps 
+
+The ideas of this work have to be 
+verified through a functional software which needs to be developed first. The focus is not necessarily on the quality of disposition, nor on the accurate representation of a real railway operation or a railway operation simulation, but rather on the question of how a user interface and a user interaction model between railway (simulation) with AI (disposition algorithmics from the field of OR, heuristics, Multi-Agent Path Finding (MAPF), or Multi-Agent Reinforcement Learning (MARL)) and human interactions can be implemented.
+
+
 - Implement a simple Flatland Agent (such as e.g. [shortest_path_deadlock_avoidance_policy](https://github.com/aiAdrian/flatland_solver_policy/tree/main/policy/heuristic_policy/shortest_path_deadlock_avoidance_policy), ... ) and build the break through
 - Enhance the AI ​​or introduce real AI (OR, ..., [MAPF](https://mapf.info/index.php/Main/News), ... MARL)
 - Implement the proposed Design (build a prototyp) - it might can be integrated into an existing framework such as interactiveAI from SystemX

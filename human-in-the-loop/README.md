@@ -1,7 +1,13 @@
 # Human in the Loop and Flatland
 
-# Problem
-TODO
+## What we did
+We particularly dealt with the question of how the information from Flatland can be made accessible to humans so that users can quickly and easily get an overview. Additionally, we tried to create a version in the first draft that reduces the cognitive load on humans. We were also inspired by the idea of hypervision.
+
+We also thought about how everything could be arranged in the frontend (user interface). On the one hand, the system should present possible scenarios as suggestions to the user, and on the other hand, the user should be able to communicate the goals to the system (globally or locally, i.e., it must also be possible to influence or control the optimization goals for a very specific, individual train directly or indirectly).
+
+For this purpose, we created a UI prototype that visually represents the essential elements and explains the different views.
+
+# Solution idea
 
 ## Prerequisites
 To prototypically implement the ideas found in the field of user interaction, user interface, and human-machine interaction, some basic prerequisites must be met:
@@ -38,12 +44,7 @@ Assuming that Simulationsoftware (Flatland) exists with an AI-supported planning
 - **The system should have the option to switch off the dispatching suggestions and/or the notification panel**
   
 
-## What we did
-We particularly dealt with the question of how the information from Flatland can be made accessible to humans so that users can quickly and easily get an overview. Additionally, we tried to create a version in the first draft that reduces the cognitive load on humans. We were also inspired by the idea of hypervision.
 
-We also thought about how everything could be arranged in the frontend (user interface). On the one hand, the system should present possible scenarios as suggestions to the user, and on the other hand, the user should be able to communicate the goals to the system (globally or locally, i.e., it must also be possible to influence or control the optimization goals for a very specific, individual train directly or indirectly).
-
-For this purpose, we created a UI prototype that visually represents the essential elements and explains the different views.
 # Results 
 
 ## View: Example 1

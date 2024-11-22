@@ -1,7 +1,7 @@
 # Human in the Loop and Flatland
 
 ## What we did
-We dealt with the question of how the information from Flatland can be made accessible to humans so that users can quickly and easily get an overview of what is happening. Additionally, we tried to create a version in the first draft that reduces the cognitive load on humans. We were also inspired by the idea of hypervision.
+We dealt with the question of how the information from Flatland can be made accessible to humans dispachters so that they can quickly get an overview of what is happening in the simulated world (Flatland). Additionally, we tried to create a clickable UI/UX prototype with the goal to identify the key components. 
 
 We also thought about how everything could be arranged in the frontend (user interface). On the one hand, the system should present possible scenarios as suggestions to the user, and on the other hand, the user should be able to communicate the goals to the system (globally or locally, i.e., it must also be possible to influence or control the optimization goals for a very specific, individual train directly or indirectly).
 

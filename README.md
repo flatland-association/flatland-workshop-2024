@@ -17,6 +17,8 @@ Shared codespace for [Flatland Workshop and Symposium 2024](https://flatland-ass
 * [Flatland baselines](_backlog/flatland-baselines/README.md)
 * [Flatland next rail env generator](_backlog/next-rail-env-generator/README.md)
 
+* please read: https://arxiv.org/abs/2411.14411
+
 ## TL;DR;
 
 Use local setup (preferred) or, alternatively, Colab approach.

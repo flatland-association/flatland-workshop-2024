@@ -17,7 +17,11 @@ Shared codespace for [Flatland Workshop and Symposium 2024](https://flatland-ass
 * [Flatland baselines](_backlog/flatland-baselines/README.md)
 * [Flatland next rail env generator](_backlog/next-rail-env-generator/README.md)
 
-* please read: https://arxiv.org/abs/2411.14411
+* please read:
+ Submitted on 21 Nov 2024]
+ Multi-Agent Environments for  Vehicle Routing Problems
+ Ricardo Gama, Daniel Fuertes, Carlos R. del-Blanco, Hugo L. Fernandes
+ https://arxiv.org/abs/2411.14411
 
 ## TL;DR;
 

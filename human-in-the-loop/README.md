@@ -7,9 +7,9 @@ We also thought about how everything could be arranged in the frontend (user int
 
 For this purpose, we created a UI prototype that visually represents the essential elements and explains the different views.
 
-# Solution idea
+## Solution idea
 
-## Prerequisites
+### Prerequisites
 To prototypically implement the ideas found in the field of user interaction, user interface, and human-machine interaction, some basic prerequisites must be met:
 
 - A simulation environment exists that allows disposition decisions (actions) to be made and which are then applied or implemented by the system, and the temporal course (including the impact of the actions) can be simulated through simulation.
@@ -17,14 +17,16 @@ To prototypically implement the ideas found in the field of user interaction, us
 - A disposition method exists that can be controlled by optimization goals, which are currently of importance, e.g., minimizing train delays.
 - A disposition method exists that can be interactively controlled by settings, determining which actions can be taken, including changing routes, stopping vehicles (agents waiting, etc.).
 
-## Assumptions
+### Assumptions
 Assuming that Simulationsoftware (Flatland) exists with an AI-supported planning agent, we began laying the foundation for the question of how we can make Flatland data more accessible to humans and how humans can communicate with the AI-supported planning agent so that it knows the optimization goals or how humans can influence the behavior of the AI agents through proactive or reactive control.
 
-## Goals
+### Goals
 
 - **User should be able to control the dispatching goals globally (for all agents) or locally for one single agent (override global setting).**
   The interaction should be possible globally or at the agent level. This means that, on the one hand, we want to communicate the global goals to the system or dynamically adjust them, but also give each agent a strategy 
   that differs from the global one. This means that different goals can be pursued at different levels or, depending on the importance of a train, which goals or priorities should be pursued for a specific train.
+
+### Requirements
 
 - **User should be able to select one single agent and choose dispatching action for this single train separately.**
 
@@ -45,17 +47,17 @@ Assuming that Simulationsoftware (Flatland) exists with an AI-supported planning
   
 
 
-# Results 
+## Results 
 
-## View: Example 1
+### View: Example 1
 <img width="640" alt="Interface 0 31" src="https://github.com/user-attachments/assets/61719a6f-650e-4c18-8868-7bb28ce7cc6f">
 
-## View: Example 2
+### View: Example 2
 <img width="640" alt="Interface 0 32" src="https://github.com/user-attachments/assets/00c2708e-2dbd-4abf-bde7-7544e17fc13f">
 
 
 
-# Next steps 
+## Next steps 
 
 The ideas of this work have to be 
 verified through a functional software which needs to be developed first. The focus is not necessarily on the quality of disposition, nor on the accurate representation of a real railway operation or a railway operation simulation, but rather on the question of how a user interface and a user interaction model between railway (simulation) with AI (disposition algorithmics from the field of OR, heuristics, Multi-Agent Path Finding (MAPF), or Multi-Agent Reinforcement Learning (MARL)) and human interactions can be implemented.
@@ -67,7 +69,7 @@ verified through a functional software which needs to be developed first. The fo
 - Test with Human and find weaks and strongs
 - Adapt the findings
 
-# Source of inspiration
+## Source of inspiration
 
 Rousseau, T., Amokrane, K., Meddeb, M., Renoir, N. , Brunat, M. , Fort, M. , Schott, L. , Mahler, S. , Berthou, H. (2024, April) 
 [Cooperation between a human traffic manager and an AI assistant for an improved railway infrastructure resilience.](https://hal.science/hal-04547672/)

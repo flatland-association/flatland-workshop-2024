@@ -21,6 +21,7 @@ Shared codespace for [Flatland Workshop and Symposium 2024](https://flatland-ass
 ## Publication 
 An overview: 
 - [Research results using Flatland](https://github.com/aiAdrian/flatland_railway_extension/blob/master/publications/flatland_research.MD)
+- [Youtube: Video recordings of lectures/talks](https://github.com/aiAdrian/flatland_railway_extension/blob/master/publications/youtube_flatland.MD)
 
 
 Very interesting with potentially big impact on Flatland 4.0 - published - 21 Nov 2024: 

@@ -18,7 +18,8 @@ Shared codespace for [Flatland Workshop and Symposium 2024](https://flatland-ass
 * [Flatland next rail env generator](_backlog/next-rail-env-generator/README.md)
 
 
-## Publications / What still exists?
+## Publications - what was done before
+
 An overview: 
 - [Research results using Flatland](https://github.com/aiAdrian/flatland_railway_extension/blob/master/publications/flatland_research.MD)
 - [Youtube: Video recordings of lectures/talks](https://github.com/aiAdrian/flatland_railway_extension/blob/master/publications/youtube_flatland.MD)

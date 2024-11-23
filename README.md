@@ -23,7 +23,7 @@ Shared codespace for [Flatland Workshop and Symposium 2024](https://flatland-ass
 Research results using Flatland](https://github.com/aiAdrian/flatland_railway_extension/blob/master/publications/flatland_research.MD)
 
 
-Very interesting with potential high impact on Flatland 4.0 -  Submitted on 21 Nov 2024: 
+Very interesting with potentially big impact on Flatland 4.0 - published - 21 Nov 2024: 
  [**Multi-Agent Environments for  Vehicle Routing Problems**](
  https://arxiv.org/abs/2411.14411)
 Ricardo Gama, Daniel Fuertes, Carlos R. del-Blanco, Hugo L. Fernandes

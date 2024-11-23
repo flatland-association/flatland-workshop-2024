@@ -24,8 +24,10 @@ Research results using Flatland](https://github.com/aiAdrian/flatland_railway_ex
 
 
 Very interesting: Submitted on 21 Nov 2024: 
- Multi-Agent Environments for  Vehicle Routing Problems
+ **Multi-Agent Environments for  Vehicle Routing Problems** 
+ 
  Ricardo Gama, Daniel Fuertes, Carlos R. del-Blanco, Hugo L. Fernandes
+ 
  https://arxiv.org/abs/2411.14411
 
 ## TL;DR;

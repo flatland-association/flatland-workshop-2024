@@ -29,7 +29,7 @@ Very interesting with potentially big impact on Flatland 4.0:
 -  Ricardo Gama, Daniel Fuertes, Carlos R. del-Blanco, Hugo L. Fernandes -
  [**Multi-Agent Environments for  Vehicle Routing Problems**](
  https://arxiv.org/abs/2411.14411) -
- arXiv:2411.14411 - 21 Nov 2024
+ arXiv:2411.14411 -  :boom: 21 Nov 2024
 
 
 

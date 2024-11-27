@@ -96,6 +96,8 @@ ICAPS 2024 Conference
 
 [Inspiration: iTrain (iCar) Editor](https://www.berros.eu/de/itrain/screenshots.php) ![image](https://github.com/user-attachments/assets/f48af25e-1a17-4d7b-9bd8-1198553a6c98)
 
+[Preference Explanation and Decision Support for Multi-Objective Real-World Test Laboratory Scheduling](https://openreview.net/pdf?id=1u95DvUJjE)
+![image](https://github.com/user-attachments/assets/fe41dae7-c395-4ae5-aafc-b960391396cf)
 
 
 

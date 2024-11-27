@@ -40,7 +40,7 @@ Assuming that Simulationsoftware (Flatland) exists with an AI-supported planning
 
 - **The system should be able to notify the user when some unexpected events occurs.**
 - **The system should have a map like flatland rendering/visualisation which is realted to the ["Streckenspiegel"](https://fahrweg.dbnetze.com/resource/blob/1359516/86b02d132898b0532d085671bc11578a/kundenpraesentation_leidis_nk_basisversion-data.pdf)**
-- **The system should have [graphic timetable / tiem-distance-visualisation](https://github.com/SchweizerischeBundesbahnen/netzgrafik-editor-frontend/blob/main/documentation/Graphic_Timetable.md) . User should be able to select a certain "Path/route"**
+- **The system should have [graphic timetable / time-distance-visualisation](https://github.com/SchweizerischeBundesbahnen/netzgrafik-editor-frontend/blob/main/documentation/Graphic_Timetable.md) . User should be able to select a certain "Path/route"**
 
 - **The system should have the option to switch automatic dispatching on. When enabled, no user-defined action can be taken. The user can only control the dispatching result through the goals.**
 - **The system should have the option to switch off the dispatching suggestions and/or the notification panel**

@@ -86,6 +86,10 @@ In HHAI2022: Augmenting Human Intellect (pp. 79-95). IOS Press.
 Ammar N. Abbas, Chidera W. Amazu, Joseph Mietkiewicz, Houda Briwa, Andres Alonzo Perez, Gabriele Baldissone, Micaela Demichela, Georgios G. Chasparis, John D. Kelleher, Maria Chiara Leva
 [Analyzing Operator States and the Impact of AI-Enhanced Decision Support in Control Rooms: A Human-in-the-Loop Specialized Reinforcement Learning Framework for Intervention Strategies](https://arxiv.org/abs/2402.13219)
 
+Florian Mischek, Nysret Musliu
+[Preference Explanation and Decision Support for Multi-Objective Real-World Test Laboratory Scheduling](https://openreview.net/pdf?id=1u95DvUJjE)
+ICAPS 2024 Conference
+
 ### Editor (Tracklayout/Topology)
 ---
 [iTrain Simulator](https://www.berros.eu/de/itrain/) ![image](https://github.com/user-attachments/assets/8b8c7156-1ebd-48b9-9652-d728b708b6cc)

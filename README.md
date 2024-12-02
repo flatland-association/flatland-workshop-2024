@@ -10,6 +10,7 @@ Shared codespace for [Flatland Workshop and Symposium 2024](https://flatland-ass
 * [Real-World Scenarios in FLATLAND](real-world-scenarios/README.md)
 
 ### Backlog
+
 * [Complex schedules in Flatland using Netzgrafikeditor](_backlog/complex-schedules-using-netzgrafikeditor/README.md)
 * [Real-world infrastructures for Flatland](_backlog/real-world-infrastructures/README.md)
 * [Interactive user interface design for real-time simulations with Flatland](_backlog/interactive-user-interface-design/README.md)
@@ -17,21 +18,19 @@ Shared codespace for [Flatland Workshop and Symposium 2024](https://flatland-ass
 * [Flatland baselines](_backlog/flatland-baselines/README.md)
 * [Flatland next rail env generator](_backlog/next-rail-env-generator/README.md)
 
-
 ## Publications - What was done before
 
-An overview: 
+An overview:
+
 - [Research results using Flatland](https://github.com/aiAdrian/flatland_railway_extension/blob/master/publications/flatland_research.MD)
 - [Youtube: Video recordings of lectures/talks](https://github.com/aiAdrian/flatland_railway_extension/blob/master/publications/youtube_flatland.MD)
 
+Very interesting with potentially big impact on Flatland 4.0:
 
-Very interesting with potentially big impact on Flatland 4.0: 
--  Ricardo Gama, Daniel Fuertes, Carlos R. del-Blanco, Hugo L. Fernandes -
- [**Multi-Agent Environments for  Vehicle Routing Problems**](
- https://arxiv.org/abs/2411.14411) -
- arXiv:2411.14411 -  :boom: 21 Nov 2024
-
-
+- Ricardo Gama, Daniel Fuertes, Carlos R. del-Blanco, Hugo L. Fernandes -
+  [**Multi-Agent Environments for Vehicle Routing Problems**](
+  https://arxiv.org/abs/2411.14411) -
+  arXiv:2411.14411 -  :boom: 21 Nov 2024
 
 ## TL;DR;
 
@@ -41,7 +40,12 @@ Use local setup (preferred) or, alternatively, Colab approach.
 
 Pre-requisite: [Install Miniconda](https://docs.anaconda.com/miniconda/miniconda-install/) (or use any XXXconda).
 
+#### bash
+
 ```shell
+# first time conda usage only
+conda init bash
+
 conda create -n flatland python=3.10.0
 conda activate flatland
 
@@ -54,6 +58,27 @@ export PYTHONPATH=.
 python -m jupyter notebook
 
 # open browser http://127.0.0.1:8888/notebooks/notebooks/flatland_animate.ipynb
+```
+
+#### Windows Powershell
+
+```shell
+# first time conda usage only
+conda init powershell
+
+conda create -n flatland python=3.10.0
+conda activate flatland
+
+
+git clone https://github.com/flatland-association/flatland-rl.git
+cd flatland-rl
+python -m pip install -r requirements.txt -r requirements-dev.txt
+
+set PYTHONPATH=C:\<currentpath>
+python -m jupyter notebook
+
+# open browser http://127.0.0.1:8888/notebooks/notebooks/flatland_animate.ipynb
+```
 
 #### Troubleshooting
 
@@ -63,3 +88,5 @@ python -m jupyter notebook
 ### Colab
 
 Alternatively, use the provided [simple_flatland_rl.ipynb on Colab](https://colab.research.google.com/drive/1qtwB4xyX4njmtMDScEBm-iIH5VyYpuWG?usp=sharing)
+
+

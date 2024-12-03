@@ -90,8 +90,12 @@ Florian Mischek, Nysret Musliu
 [Preference Explanation and Decision Support for Multi-Objective Real-World Test Laboratory Scheduling](https://openreview.net/pdf?id=1u95DvUJjE)
 ICAPS 2024 Conference
 
-### Editor (Tracklayout/Topology)
+#### Editor (Tracklayout/Topology) - Source of inspiration 
 ---
+
+![image](https://github.com/user-attachments/assets/c4fdd006-88c5-46c3-bca4-f01543108994)
+
+
 [iTrain Simulator](https://www.berros.eu/de/itrain/) ![image](https://github.com/user-attachments/assets/8b8c7156-1ebd-48b9-9652-d728b708b6cc)
 
 [Inspiration: iTrain (iCar) Editor](https://www.berros.eu/de/itrain/screenshots.php) ![image](https://github.com/user-attachments/assets/f48af25e-1a17-4d7b-9bd8-1198553a6c98)

@@ -50,7 +50,7 @@ Assuming that Simulationsoftware (Flatland) exists with an AI-supported planning
 ## Results 
 
 ### View: Example 1
-<img width="640" alt="Interface 0 31" src="[https://github.com/user-attachments/assets/61719a6f-650e-4c18-8868-7bb28ce7cc6f](https://github.com/user-attachments/assets/6b1e9893-16c5-4d4d-b038-6b429199656b)">
+<img width="640" alt="Interface 0 31" src="https://github.com/user-attachments/assets/6b1e9893-16c5-4d4d-b038-6b429199656b">
 
 ### View: Example 2
 <img width="640" alt="Interface 0 32" src="https://github.com/user-attachments/assets/00c2708e-2dbd-4abf-bde7-7544e17fc13f">

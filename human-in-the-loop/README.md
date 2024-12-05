@@ -1,7 +1,7 @@
 # Human in the Loop and Flatland
 
 ## What we did
-We dealt with the question of how the information from Flatland can be made accessible to humans dispachters so that they can quickly get an overview of what is happening in the simulated world (Flatland). Additionally, we tried to create a (conceptual) prototype with the goal to identify the key components. 
+We dealt with the question of how the information from Flatland can be made accessible to humans dispachters so that they can quickly get an overview of what is happening in the simulated world (Flatland). Additionally, we tried to create a (conceptual) prototype with the goal to identify the key components for visualisation (explaination) and for interaction (exploration, human-ai-cooperation). 
 
 We also thought about how everything could be arranged in the frontend (user interface). On the one hand, the system should present possible scenarios as suggestions to the user, and on the other hand, the user should be able to communicate the goals to the system (globally or locally, i.e., it must also be possible to influence or control the optimization goals for a very specific, individual train directly or indirectly).
 

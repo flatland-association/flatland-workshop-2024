@@ -1,17 +1,88 @@
-# Next Graph-Based Observation
+# Enhancements to Tree Observation (maybe to Graph/will support graph)
 
-## Objectives
+## Introduction
 
-1. ✅ Verify tree obs is collapsed (not intermedate cells)
+### Objectives
+
+1. ✅ Verify tree obs is collapsed (not intermediate cells)
 2. 🔲 Re-create - integrate Alberto's solution into Flatland core
 3. 🔲 What feature can we add to augment the information to conflict in Alberto's solution?
 
-## Tree Obs
+### Members of discussion:
 
-Current implementation is cell based.
-However, there is a collapsed implementation [here](https://github.com/aiAdrian/flatland_railway_extension?tab=readme-ov-file).
+* Christian Eichenberger (flatland, prev SBB)
+* Alberto (EnliteAI)
+* Farhad (DB)
+* Jeremy (flatland)
 
-## Alberto's approach
+### Motivations:
+
+* Tree observation is slow and memory intensive (and so cannot provide sufficient depth)
+* Provide an easily usable enhancement for the next Flatland iteration
+    * Address concerns expressed by previous participants / researchers.
+    * Improve performance but preserve ability to enhance / change
+
+### Desirable Features
+
+* Improve features for potential future conflicts (mazerl Alberto obs)
+* TreeLSTM observation
+    * “Pruned” or shaped tree permits greater depth
+    * C implementation improves performance but raises the barrier to reviews and modifications
+
+This will work as a baseline to then extract high-level features to shape an observation.
+Want to incorporate more multi-agent / comms features? Eg some form of “global” observation?
+
+### Graph based Observation vs Graph Environment
+
+The grid-based core of flatland is being increasingly seen as a technical burden. It was adopted historically because of the existing literature and examples
+available. It is now a limitation.
+However it will be somewhat radical to discard and replace the existing grid env.
+
+We consider the interim step of a graph observation / translation built on the existing grid env:
+Compute cost of translation
+Burden of maintaining two views
+
+Vs
+
+Replace the various FL components with graph-based equivalents:
+
+* Env generation
+* Stepping engine
+* Observations
+* Persistence
+
+### What can we do today to make a difference?
+
+Very often agents follow their “predicted path” → recycle previous computation and update only the out-of-date information.
+Currently the tree-observation has a depth specified in #cells. Graph-wise would be better to specify the depth of view as traversed edges.
+
+How do we evaluate the cost of conversion?
+
+We collect trajectories with several trains and different map sizes and then replay while enabling different observations. We can then benchmark the impact of
+our proposal.
+
+### EnhanceTreeObsForRailEnv Objectives
+
+[GitHub Issue flatland-rl #89](https://github.com/flatland-association/flatland-rl/issues/89)
+
+* Control exploration by number of branches and not by number of cells to explore.
+    * Current implementation is cell based.
+* Speed-up TreeObs: efficient data structure for "overlay" graph of decision points (for tree branches)
+    * There is a collapsed implementation [here](https://github.com/aiAdrian/flatland_railway_extension?tab=readme-ov-file).
+* Visualization of current state of overlay graph
+* Add new features to TreeObsForRailEnv (currently 12)
+* It should be easy to add new features
+
+### Miscellaneous Considerations
+
+Tree does not recombine. A graph obs based on the rail topology would recombine; but different agent paths may alight on a no
+Flatland competition used constrained compute (4 cores for ~10 mins?)  
+Monte-Carlo Tree Search (MCTS) requires “rewinding” of episodes back to “checkpoints”. We could build more support for this in the env. We already record
+episode steps, and index into the PseudoRandom sequence. This could improve the performance of MCTS approaches by reducing the burden of env persistence.
+
+## Objective 2: Integrate Alberto's approach
+
+### Alberto's approach
 
 * will be open-sourced in the next few weeks. However, it's [maze](https://github.com/enlite-ai/maze)-based, not generic Flatland observation.
 * pruned tree in-memory, list of features:
@@ -54,7 +125,7 @@ Missing values in present node are filled in with +inf (truncated).
 
 ![Graph Observation](GraphObs.png)
 
-## Efficient Implementation?
+### Efficient Implementation?
 
 The exploration is time-consuming.
 Alberto reaches branch-depth max 3 to stay within submission limit. Corresponds to "cell-depth" of 10-25.
@@ -64,7 +135,7 @@ For Alberto's MCTS, TreeObs is the bigger bottleneck than serialization/de-seria
 
 :warning: However, from a AI4RealNet Project Perspective, serialization/de-serialization has highest priority.
 
-## Ideation of additional features
+## Objective 3: Ideation of additional features
 
 * n-shortest: weighted
   ![nShortest.png](nShortest.png)
@@ -79,7 +150,6 @@ For Alberto's MCTS, TreeObs is the bigger bottleneck than serialization/de-seria
   a "baseline", from that point of view maybe start early, Alberto not blocked, question of priorities... Open:
     * look up shortest paths in current implementation
     * use Adrian's graph for shortest path computations in the core as well?
-    *
 
 ## Tangible Outcomes
 
@@ -90,72 +160,3 @@ For Alberto's MCTS, TreeObs is the bigger bottleneck than serialization/de-seria
     * Slack for instant messaging
     * GitHub discussions
 
-# Wrap-Up: Enhancements to Tree Observation (maybe to Graph/will support graph)
-
-## Members of discussion:
-
-* Christian Eichenberger (flatland, prev SBB)
-* Alberto (EnliteAI)
-* Farhad (DB)
-* Jeremy (flatland)
-
-## Motivations:
-
-* Tree observation is slow and memory intensive (and so cannot provide sufficient depth)
-* Provide an easily usable enhancement for the next Flatland iteration
-    * Address concerns expressed by previous participants / researchers.
-    * Improve performance but preserve ability to enhance / change
-
-## Desirable Features from
-
-* Improve features for potential future conflicts (mazerl Albreto obs)
-* TreeLSTM observation
-    * “Pruned” or shaped tree permits greater depth
-    * C implementation improves performance but raises the barrier to reviews and modifications
-
-This will work as a baseline to then extract high-level features to shape an observation.
-Want to incorporate more multi-agent / comms features? Eg some form of “global” observation?
-
-## Graph based Observation vs Graph Environment
-
-The grid-based core of flatland is being increasingly seen as a technical burden. It was adopted historically because of the existing literature and examples
-available. It is now a limitation.
-However it will be somewhat radical to discard and replace the existing grid env.
-
-We consider the interim step of a graph observation / translation built on the existing grid env:
-Compute cost of translation
-Burden of maintaining two views
-
-Vs
-
-Replace the various FL components with graph-based equivalents:
-
-* Env generation
-* Stepping engine
-* Observations
-* Persistence
-
-## What can we do today to make a difference?
-
-Very often agents follow their “predicted path” → recycle previous computation and update only the out-of-date information.
-Currently the tree-observation has a depth specified in #cells. Graph-wise would be better to specify the depth of view as traversed edges.
-
-How do we evaluate the cost of conversion?
-
-We collect trajectories with several trains and different map sizes and then replay while enabling different observations. We can then benchmark the impact of
-our proposal.
-
-## EnhanceTreeObsForRailEnv Objectives
-[Description](https://github.com/flatland-association/flatland-rl/issues/89)
-* Control exploration by number of branches and not by number of cells to explore.
-* Speed-up TreeObs: efficient data structure for "overlay" graph of decision points (for tree branches)
-* Visualization of current state of overlay graph
-* Add new features to TreeObsForRailEnv (currently 12)
-* It should be easy to add new features
-
-## Miscellaneous Considerations
-
-Tree does not recombine. A graph obs based on the rail topology would recombine; but different agent paths may alight on a no
-Flatland competition used constrained compute (4 cores for ~10 mins?)  
-Monte-Carlo Tree Search (MCTS) requires “rewinding” of episodes back to “checkpoints”. We could build more support for this in the env. We already record
-episode steps, and index into the PseudoRandom sequence. This could improve the performance of MCTS approaches by reducing the burden of env persistence.

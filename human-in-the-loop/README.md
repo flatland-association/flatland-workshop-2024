@@ -1,9 +1,9 @@
 # Human in the Loop and Flatland
 
 ## Team 
-[Michaela Hildebrandt](https://michaelahildebrandt.com/)
-[Adrian Egli](https://www.linkedin.com/in/adrian-egli-733a9544/)
-[Daniel Boos](https://www.linkedin.com/in/boosdaniel)
+- [Michaela Hildebrandt](https://michaelahildebrandt.com/)
+- [Adrian Egli](https://www.linkedin.com/in/adrian-egli-733a9544/)
+- [Daniel Boos](https://www.linkedin.com/in/boosdaniel)
 
 ## What we did
 We dealt with the question of how the information from Flatland can be made accessible to humans dispachters so that they can quickly get an overview of what is happening in the simulated world (Flatland). Additionally, we tried to create a (conceptual) prototype with the goal to identify the key components for visualisation (explaination) and for interaction (exploration, human-ai-cooperation). 

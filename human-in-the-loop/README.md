@@ -56,6 +56,12 @@ Assuming that Simulationsoftware (Flatland) exists with an AI-supported planning
 ### View: Example 2
 <img width="640" alt="Interface 0 32" src="https://github.com/user-attachments/assets/00c2708e-2dbd-4abf-bde7-7544e17fc13f">
 
+### Results
+
+[Flatland Train Dispatcher Interface 20241206.pptx](https://github.com/user-attachments/files/18090580/Flatland.Train.Dispatcher.Interface.20241206.pptx)
+[Flatland Train Dispatcher Interface 20241206.pdf](https://github.com/user-attachments/files/18090579/Flatland.Train.Dispatcher.Interface.20241206.pdf)
+
+
 [Preview in Figma](https://embed.figma.com/proto/2ozvNPInECnQwQOpdHw3L4/Flatland-Dispatcher-Interface?node-id=58-27041&node-type=frame&scaling=contain&content-scaling=fixed&page-id=5%3A2&embed-host=share)
 
 

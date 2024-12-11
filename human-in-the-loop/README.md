@@ -7,9 +7,8 @@
 
 
 
-### Results: AI Assistant System for Human Dispatchers in Railway 
-
-OperationsRailway operations, characterized by densely planned schedules, are often disrupted by unexpected events such as delays, infrastructure defects, and urgent maintenance requirements. Ensuring the execution of the planned timetable necessitates prompt and effective responses to these disruptions. This requires frequent adaptation and rescheduling of train operations.
+### Results: AI Assistant System for Human Dispatchers in Railway Operations
+Railway operations, characterized by densely planned schedules, are often disrupted by unexpected events such as delays, infrastructure defects, and urgent maintenance requirements. Ensuring the execution of the planned timetable necessitates prompt and effective responses to these disruptions. This requires frequent adaptation and rescheduling of train operations.
 
 Currently, maintaining seamless operations relies on highly skilled personnel in operational centers who continuously monitor traffic flow day and night, making critical decisions to reschedule trains as needed. 
 

@@ -56,6 +56,7 @@ Assuming that Simulationsoftware (Flatland) exists with an AI-supported planning
 ### View: Example 2
 <img width="640" alt="Interface 0 32" src="https://github.com/user-attachments/assets/00c2708e-2dbd-4abf-bde7-7544e17fc13f">
 
+[Preview in Figma](https://embed.figma.com/proto/2ozvNPInECnQwQOpdHw3L4/Flatland-Dispatcher-Interface?node-id=58-27041&node-type=frame&scaling=contain&content-scaling=fixed&page-id=5%3A2&embed-host=share)
 
 
 ## Next steps 
